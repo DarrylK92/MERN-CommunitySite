@@ -9,18 +9,18 @@ const Landing = ({ isAuthenticated }) => {
     button = <div></div>;
   } else {
     button = (
-      <Link to='/login' class='btn btn-light'>
+      <Link to="/login" class="btn btn-light">
         Login
       </Link>
     );
   }
 
   return (
-    <section className='landing'>
-      <div className='dark-overlay'>
-        <div className='landing-inner'>
-          <h1 className='x-large'>Community Site</h1>
-          <div className='buttons'>{button}</div>
+    <section className="landing">
+      <div className="dark-overlay">
+        <div className="landing-inner">
+          <h1 className="x-large">Community Site</h1>
+          <div className="buttons">{button}</div>
         </div>
       </div>
     </section>
@@ -28,11 +28,11 @@ const Landing = ({ isAuthenticated }) => {
 };
 
 Landing.propTypes = {
-  isAuthenticated: PropTypes.bool,
+  isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps)(Landing);
