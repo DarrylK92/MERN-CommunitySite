@@ -5,13 +5,26 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
-import { getProfileById } from '../../actions/profile';
+import { getProfileById, getCurrentProfile } from '../../actions/profile';
+import setAuthToken from '../../utils/setAuthToken';
 
-const Profile = ({ getProfileById, profile: { profile }, auth }) => {
+const Profile = ({
+  getProfileById,
+  getCurrentProfile,
+  profile: { profile },
+  auth
+}) => {
   const { id } = useParams();
   useEffect(() => {
-    getProfileById(id);
-  }, [getProfileById, id]);
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    if (id === 'me') {
+      getCurrentProfile();
+    } else {
+      getProfileById(id);
+    }
+  }, [getProfileById, getCurrentProfile, id]);
 
   return (
     <section className="container">
@@ -41,13 +54,16 @@ const Profile = ({ getProfileById, profile: { profile }, auth }) => {
 
 Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
-}; 
+};
 
 const mapStateToProps = (state) => ({
   profile: state.profile,
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getProfileById })(Profile);
+export default connect(mapStateToProps, { getProfileById, getCurrentProfile })(
+  Profile
+);
