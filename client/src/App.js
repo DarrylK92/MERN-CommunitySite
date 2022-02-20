@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
+import ProfileForm from './components/profile-forms/ProfileForm';
+import Profile from './components/profile/Profile';
+import Dashboard from './components/dashboard/Dashboard';
 import Alert from './components/layout/Alert';
 import NotFound from './components/layout/NotFound';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -39,9 +42,22 @@ const App = () => {
         <Navbar />
         <Alert />
         <Routes>
-          <Route path='/' element={<Landing />} />
-          <Route path='login' element={<Login />} />
-          <Route path='/*' element={<NotFound />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="login" element={<Login />} />
+          <Route path="profile/:id" element={<Profile />} />
+          <Route
+            path="create-profile"
+            element={<PrivateRoute component={ProfileForm} />}
+          />
+          <Route
+            path="edit-profile"
+            element={<PrivateRoute component={ProfileForm} />}
+          />
+          <Route
+            path="dashboard"
+            element={<PrivateRoute component={Dashboard} />}
+          />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
     </Provider>

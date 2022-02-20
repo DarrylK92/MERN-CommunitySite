@@ -3,15 +3,22 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import setAuthToken from './utils/setAuthToken';
+import * as actionCreators from './actions/types';
 
 const initialState = {};
 
 const middleware = [thunk];
 
+const composeEnhancers = composeWithDevTools({
+  actionCreators,
+  trace: true,
+  traceLimit: 25
+});
+
 const store = createStore(
   rootReducer,
   initialState,
-  composeWithDevTools(applyMiddleware(...middleware))
+  composeEnhancers(applyMiddleware(...middleware))
 );
 
 /*
@@ -31,6 +38,8 @@ store.subscribe(() => {
   currentState = store.getState();
   // if the token changes set the value in localStorage and axios headers
   if (previousState.auth.token !== currentState.auth.token) {
+    console.log('Prev: ' + previousState.auth.token);
+    console.log('New: ' + currentState.auth.token);
     const token = currentState.auth.token;
     setAuthToken(token);
   }
