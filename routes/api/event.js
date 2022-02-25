@@ -193,3 +193,45 @@ router.post(
     }
   }
 );
+
+// @route    DELETE api/event/position/:event_id/:position_id
+// @desc     Delete position
+// @access   Private
+router.delete(
+  '/event/position/:event_id/:position_id',
+  auth,
+  checkObjectId('event_id'),
+  checkObjectId('position_id'),
+  async (req, res) => {
+    try {
+      const event = await Event.findById(req.params.event_id);
+
+      if (!event) {
+        return res.status(404).json({ msg: 'Event not found' });
+      }
+
+      const position = event.positions.find(
+        (position) => position.id === req.params.position_id
+      );
+
+      if (!position) {
+        return res.status(404).json({ msg: 'Position does not exist' });
+      }
+
+      if (event.user.toString() !== req.user.id) {
+        return res.status(401).json({ msg: 'User not authorized' });
+      }
+
+      event.positions = event.positions.filter(
+        ({ id }) => id !== req.params.position_id
+      );
+
+      await event.save();
+
+      return res.json(event.positions);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).send('Server Error');
+    }
+  }
+);
