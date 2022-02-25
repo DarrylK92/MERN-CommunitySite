@@ -148,3 +148,48 @@ router.delete(
     }
   }
 );
+
+// @route    POST api/event/position/:event_id
+// @desc     Create an event
+// @access   Private
+router.post(
+  '/event/position/:event_id',
+  auth,
+  checkObjectId('event_id'),
+  check('name', 'Name is required').notEmpty(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const event = await Event.findById(req.params.event_id);
+
+      if (!event) {
+        return res.status(404).json({ msg: 'Event not found' });
+      }
+
+      const { name, requestedSkills } = req.body;
+
+      const newPosition = {
+        event: event_id,
+        name: name,
+        requestedSkills: Array.isArray(requestedSkills)
+          ? requestedSkills
+          : requestedSkills
+              .split(',')
+              .map((requestedSkills) => ' ' + requestedSkills.trim())
+      };
+
+      event.positions.unshift(newPosition);
+
+      await event.save();
+
+      res.json(event.positions);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
