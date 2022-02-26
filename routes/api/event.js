@@ -235,3 +235,45 @@ router.delete(
     }
   }
 );
+
+// @route    POST api/event/volunteer/:event_id
+// @desc     Create an volunteer
+// @access   Private
+router.post(
+  '/event/position/volunteer/:event_id/:position_id',
+  auth,
+  checkObjectId('event_id'),
+  checkObjectId('position_id'),
+  async (req, res) => {
+    try {
+      const event = await Event.findById(req.params.event_id);
+
+      if (!event) {
+        return res.status(404).json({ msg: 'Event not found' });
+      }
+
+      alreadyRegisteredVolunteer = event.volunteers.filter(
+        ({ position }) => position === req.params.position_id
+      );
+
+      if (alreadyRegisteredVolunteer) {
+        return res.status(401).json({ msg: 'Position already filled' });
+      }
+
+      const newVolunteer = {
+        user: req.user.id,
+        event: req.params.event_id,
+        position: req.params.position_id
+      };
+
+      event.volunteers.unshift(newVolunteer);
+
+      await event.save();
+
+      res.json(event.volunteers);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
