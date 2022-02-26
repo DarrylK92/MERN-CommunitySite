@@ -260,6 +260,10 @@ router.post(
         return res.status(401).json({ msg: 'Position already filled' });
       }
 
+      if (req.user.type === 'Organizer') {
+        return res.status(401).json({ msg: 'Organizers cannot volunteer' });
+      }
+
       const newVolunteer = {
         user: req.user.id,
         event: req.params.event_id,
@@ -274,6 +278,53 @@ router.post(
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route    DELETE api/event/position/volunteer/:event_id/:position_id/:volunteer_id
+// @desc     Delete volunteer
+// @access   Private
+router.delete(
+  '/event/position/volunteer/:event_id/:position_id/:volunteer_id',
+  auth,
+  checkObjectId('event_id'),
+  checkObjectId('position_id'),
+  checkObjectId('volunteer_id'),
+  async (req, res) => {
+    try {
+      const event = await Event.findById(req.params.event_id);
+
+      if (!event) {
+        return res.status(404).json({ msg: 'Event not found' });
+      }
+
+      const position = await Position.findById(req.params.position_id);
+
+      if (!position) {
+        return res.status(404).json({ msg: 'Position does not exist' });
+      }
+
+      const volunteer = await Volunteer.findById(req.params.volunteer_id);
+
+      if (!volunteer) {
+        return res.status(404).json({ msg: 'Volunteer does not exist' });
+      }
+
+      if (volunteer.user.toString() !== req.user.id) {
+        return res.status(401).json({ msg: 'User not authorized' });
+      }
+
+      event.volunteers = event.volunteers.filter(
+        ({ id }) => id !== req.params.volunteer_id
+      );
+
+      await event.save();
+
+      return res.json(event.volunteers);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).send('Server Error');
     }
   }
 );
