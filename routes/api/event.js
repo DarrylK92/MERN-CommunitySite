@@ -44,7 +44,6 @@ router.post(
   check('date', 'Date is required').notEmpty(),
   check('description', 'Description is required').notEmpty(),
   check('address', 'Address is required').notEmpty(),
-  check('address', 'Address is required').notEmpty(),
   check('city', 'City is required').notEmpty(),
   check('state', 'State is required').notEmpty(),
   async (req, res) => {
@@ -328,3 +327,5 @@ router.delete(
     }
   }
 );
+
+module.exports = router;
