@@ -117,7 +117,7 @@ router.put(
         return res.status(404).json({ msg: 'User not found' });
       }
 
-      if (event.user.toString() !== user.toString()) {
+      if (event.user.toString() !== user.id.toString()) {
         return res.status(401).json({ msg: 'Unauthorized user' });
       }
 
