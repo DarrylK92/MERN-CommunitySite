@@ -35,6 +35,13 @@ const EventSchema = new Schema({
       position: {
         type: Schema.Types.ObjectId,
         ref: 'position'
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      requestedSkills: {
+        type: [String]
       }
     }
   ],

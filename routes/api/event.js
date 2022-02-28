@@ -173,8 +173,7 @@ router.delete(
 // @access   Private
 router.post(
   '/position/:event_id',
-  auth,
-  checkObjectId('event_id'),
+  [auth, checkObjectId('event_id')],
   check('name', 'Name is required').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
@@ -192,7 +191,6 @@ router.post(
       const { name, requestedSkills } = req.body;
 
       const newPosition = {
-        event: event_id,
         name: name,
         requestedSkills: Array.isArray(requestedSkills)
           ? requestedSkills
@@ -201,8 +199,8 @@ router.post(
               .map((requestedSkills) => ' ' + requestedSkills.trim())
       };
 
-      event.positions.unshift(newPosition);
-
+      event.positions.push(newPosition);
+      
       await event.save();
 
       res.json(event.positions);
