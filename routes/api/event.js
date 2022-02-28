@@ -172,7 +172,7 @@ router.delete(
 // @desc     Create an event
 // @access   Private
 router.post(
-  '/event/position/:event_id',
+  '/position/:event_id',
   auth,
   checkObjectId('event_id'),
   check('name', 'Name is required').notEmpty(),
@@ -217,7 +217,7 @@ router.post(
 // @desc     Delete position
 // @access   Private
 router.delete(
-  '/event/position/:event_id/:position_id',
+  '/position/:event_id/:position_id',
   auth,
   checkObjectId('event_id'),
   checkObjectId('position_id'),
@@ -259,7 +259,7 @@ router.delete(
 // @desc     Create an volunteer
 // @access   Private
 router.post(
-  '/event/position/volunteer/:event_id/:position_id',
+  '/position/volunteer/:event_id/:position_id',
   auth,
   checkObjectId('event_id'),
   checkObjectId('position_id'),
@@ -305,7 +305,7 @@ router.post(
 // @desc     Delete volunteer
 // @access   Private
 router.delete(
-  '/event/position/volunteer/:event_id/:position_id/:volunteer_id',
+  '/position/volunteer/:event_id/:position_id/:volunteer_id',
   auth,
   checkObjectId('event_id'),
   checkObjectId('position_id'),
