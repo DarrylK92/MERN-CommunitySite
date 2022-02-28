@@ -89,8 +89,8 @@ router.post(
 // @route    PUT api/event/:event_id
 // @desc     Update an event
 // @access   Private
-router.post(
-  '/',
+router.put(
+  '/:event_id',
   [auth, checkObjectId('event_id')],
   check('name', 'Name is required').notEmpty(),
   check('date', 'Date is required').notEmpty(),
