@@ -107,8 +107,16 @@ router.post(
 
     try {
       const event = await Event.findById(req.params.event_id);
+
+      if (!event) {
+        return res.status(404).json({ msg: 'Event not found' });
+      }
+
       const user = await User.findById(req.user.id).select('-password');
-      const eventStatus = await EventStatus.findOne({ status: 'Open' });
+
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
 
       event.name = req.body.name;
       event.date = req.body.date;
