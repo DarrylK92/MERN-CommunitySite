@@ -194,7 +194,7 @@ router.post(
           ? requestedSkills
           : requestedSkills
               .split(',')
-              .map((requestedSkills) => ' ' + requestedSkills.trim())
+              .map((requestedSkills) => requestedSkills.trim())
       };
 
       event.positions.push(newPosition);
