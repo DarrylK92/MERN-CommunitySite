@@ -275,7 +275,7 @@ router.put(
         return res.status(404).json({ msg: 'Position does not exist' });
       }
 
-      if (position.volunteer !== undefined) {
+      if (position.volunteer !== undefined && position.volunteer !== null) {
         return res.status(401).json({ msg: 'Position already filled' });
       }
 
@@ -295,15 +295,14 @@ router.put(
   }
 );
 
-// @route    DELETE api/event/position/volunteer/:event_id/:position_id/:volunteer_id
+// @route    DELETE api/event/position/volunteer/:event_id/:position_id/
 // @desc     Delete volunteer
 // @access   Private
 router.delete(
-  '/position/volunteer/:event_id/:position_id/:volunteer_id',
+  '/position/volunteer/:event_id/:position_id/',
   auth,
   checkObjectId('event_id'),
   checkObjectId('position_id'),
-  checkObjectId('volunteer_id'),
   async (req, res) => {
     try {
       const event = await Event.findById(req.params.event_id);
@@ -312,29 +311,31 @@ router.delete(
         return res.status(404).json({ msg: 'Event not found' });
       }
 
-      const position = await Position.findById(req.params.position_id);
+      const position = event.positions.find(
+        (position) => position.id === req.params.position_id
+      );
 
       if (!position) {
         return res.status(404).json({ msg: 'Position does not exist' });
       }
 
-      const volunteer = await Volunteer.findById(req.params.volunteer_id);
-
-      if (!volunteer) {
-        return res.status(404).json({ msg: 'Volunteer does not exist' });
+      if (req.user.type === 'Volunteer') {
+        if (position.volunteer.toString() !== req.user.id) {
+          return res.status(401).json({ msg: 'User not authorized' });
+        }
       }
 
-      if (volunteer.user.toString() !== req.user.id) {
-        return res.status(401).json({ msg: 'User not authorized' });
+      if (req.user.type === 'Organizer') {
+        if (event.user.toString() !== req.user.id) {
+          return res.status(401).json({ msg: 'User not authorized' });
+        }
       }
 
-      event.volunteers = event.volunteers.filter(
-        ({ id }) => id !== req.params.volunteer_id
-      );
+      position.volunteer = null;
 
       await event.save();
 
-      return res.json(event.volunteers);
+      return res.json(event.positions);
     } catch (err) {
       console.error(err.message);
       return res.status(500).send('Server Error');
