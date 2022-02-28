@@ -153,7 +153,7 @@ router.delete(
       }
 
       // Check user
-      if (event.userId.toString() !== req.user.id) {
+      if (event.user.toString() !== req.user.id) {
         return res.status(401).json({ msg: 'User not authorized' });
       }
 
