@@ -58,7 +58,7 @@ router.post(
       if (!user) {
         return res.status(404).json({ msg: 'User not found' });
       }
-      
+
       const eventStatus = await EventStatus.findOne({ status: 'Open' });
 
       if (!eventStatus) {
@@ -71,7 +71,7 @@ router.post(
         description: req.body.description,
         address: req.body.address,
         city: req.body.city,
-        stsate: req.body.state,
+        state: req.body.state,
         eventStats: eventStatus.id,
         userId: user.id
       });
