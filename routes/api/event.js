@@ -54,7 +54,16 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select('-password');
+
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
+      
       const eventStatus = await EventStatus.findOne({ status: 'Open' });
+
+      if (!eventStatus) {
+        return res.status(404).json({ msg: 'Event status not found' });
+      }
 
       const newEvent = new Event({
         name: req.body.name,
