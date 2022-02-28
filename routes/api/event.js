@@ -73,7 +73,7 @@ router.post(
         city: req.body.city,
         state: req.body.state,
         eventStats: eventStatus.id,
-        userId: user.id
+        user: user.id
       });
 
       const event = await newEvent.save();
