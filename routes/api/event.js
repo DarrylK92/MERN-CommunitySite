@@ -7,8 +7,6 @@ const { check, validationResult } = require('express-validator');
 const checkObjectId = require('../../middleware/checkObjectId');
 
 const Event = require('../../models/Event');
-const Profile = require('../../models/Profile');
-const Volunteer = require('../../models/Volunteer');
 const EventStatus = require('../../models/EventStatus');
 
 // @route    GET api/event/:event_id
@@ -200,7 +198,7 @@ router.post(
       };
 
       event.positions.push(newPosition);
-      
+
       await event.save();
 
       res.json(event.positions);

@@ -33,8 +33,7 @@ const EventSchema = new Schema({
   positions: [
     {
       position: {
-        type: Schema.Types.ObjectId,
-        ref: 'position'
+        type: Schema.Types.ObjectId
       },
       name: {
         type: String,
@@ -42,14 +41,10 @@ const EventSchema = new Schema({
       },
       requestedSkills: {
         type: [String]
-      }
-    }
-  ],
-  volunteers: [
-    {
+      },
       volunteer: {
         type: Schema.Types.ObjectId,
-        ref: 'volunteer'
+        ref: 'user'
       }
     }
   ],
