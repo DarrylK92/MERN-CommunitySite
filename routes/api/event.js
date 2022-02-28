@@ -251,10 +251,10 @@ router.delete(
   }
 );
 
-// @route    POST api/event/volunteer/:event_id
-// @desc     Create an volunteer
+// @route    PUT api/event/volunteer/:event_id
+// @desc     Add an volunteer
 // @access   Private
-router.post(
+router.put(
   '/position/volunteer/:event_id/:position_id',
   auth,
   checkObjectId('event_id'),
@@ -267,11 +267,15 @@ router.post(
         return res.status(404).json({ msg: 'Event not found' });
       }
 
-      alreadyRegisteredVolunteer = event.volunteers.filter(
-        ({ position }) => position === req.params.position_id
+      const position = event.positions.find(
+        (position) => position.id === req.params.position_id
       );
 
-      if (alreadyRegisteredVolunteer) {
+      if (!position) {
+        return res.status(404).json({ msg: 'Position does not exist' });
+      }
+
+      if (position.volunteer !== undefined) {
         return res.status(401).json({ msg: 'Position already filled' });
       }
 
@@ -279,17 +283,11 @@ router.post(
         return res.status(401).json({ msg: 'Organizers cannot volunteer' });
       }
 
-      const newVolunteer = {
-        user: req.user.id,
-        event: req.params.event_id,
-        position: req.params.position_id
-      };
-
-      event.volunteers.unshift(newVolunteer);
+      position.volunteer = req.user.id;
 
       await event.save();
 
-      res.json(event.volunteers);
+      res.json(event.positions);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
