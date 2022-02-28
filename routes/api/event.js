@@ -118,6 +118,10 @@ router.post(
         return res.status(404).json({ msg: 'User not found' });
       }
 
+      if (event.user.toString() !== user.toString()) {
+        return res.status(401).json({ msg: 'Unauthorized user' });
+      }
+
       event.name = req.body.name;
       event.date = req.body.date;
       event.description = req.body.description;
