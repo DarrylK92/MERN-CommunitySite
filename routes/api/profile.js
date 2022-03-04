@@ -7,6 +7,7 @@ const { check, validationResult } = require('express-validator');
 const checkObjectId = require('../../middleware/checkObjectId');
 
 const Profile = require('../../models/Profile');
+const OrganizerProfile = require('../../models/OrganizerProfile');
 const User = require('../../models/User');
 
 // @route    GET api/profile/me
@@ -14,9 +15,17 @@ const User = require('../../models/User');
 // @access   Private
 router.get('/me', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({
-      user: req.user.id
-    }).populate('user', ['name', 'avatar']);
+    var profile
+
+    if (req.user.type === "Volunteer") {
+      profile = await Profile.findOne({
+        user: req.user.id
+      }).populate('user', ['name', 'avatar']);
+    } else {
+      profile = await OrganizerProfile.findOne({
+        user: req.user.id
+      }).populate('user', ['name', 'avatar']);
+    }
 
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
