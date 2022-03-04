@@ -37,19 +37,22 @@ router.post(
   auth,
   check('city', 'City is required').notEmpty(),
   check('state', 'State is required').notEmpty(),
-  check('skills', 'Skills is required').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // destructure the request
     const {
       skills,
-      // spread the rest of the fields we don't need to check
       ...rest
     } = req.body;
+
+    if (req.user.type === "Volunteer") {
+      if (!skills) {
+        return res.status(400).send('Skills is required');
+      }
+    }
 
     // build a profile
     const profileFields = {
