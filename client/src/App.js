@@ -44,7 +44,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="login" element={<Login />} />
-          <Route path="profile/:id" element={<Profile />} />
+          <Route
+            path="profile/:id"
+            element={<PrivateRoute component={Profile} />}
+          />
           <Route
             path="create-profile"
             element={<PrivateRoute component={ProfileForm} />}

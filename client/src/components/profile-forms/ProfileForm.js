@@ -19,7 +19,8 @@ const initialState = {
 const ProfileForm = ({
   profile: { profile, loading },
   createProfile,
-  getCurrentProfile
+  getCurrentProfile,
+  user
 }) => {
   const [formData, setFormData] = useState(initialState);
 
@@ -44,7 +45,7 @@ const ProfileForm = ({
       // set local state with the profileData
       setFormData(profileData);
     }
-  }, [loading, getCurrentProfile, profile]);
+  }, [loading, getCurrentProfile, profile, user]);
 
   const { city, state, bio, skills } = formData;
 
@@ -56,6 +57,38 @@ const ProfileForm = ({
     createProfile(formData, navigate, profile ? true : false);
   };
 
+  let skillsDisplay;
+  let cityDesc;
+  let stateDesc;
+  let bioText;
+  let bioDesc;
+  if (user.type === 'Volunteer') {
+    skillsDisplay = (
+      <div className="form-group">
+        <input
+          type="text"
+          placeholder="* Skills"
+          name="skills"
+          value={skills}
+          onChange={onChange}
+        />
+        <small className="form-text">
+          Please use comma separated values (eg. Painting, Cooking, Software
+          Engineering)
+        </small>
+      </div>
+    );
+    cityDesc = 'The city you live in';
+    stateDesc = 'Select which state you live in';
+    bioText = 'A short bio of yourself';
+    bioDesc = 'Tell us a little about yourself';
+  } else {
+    cityDesc = 'The city your organization is in';
+    stateDesc = 'Select the state your organization is in';
+    bioText = 'A short bio of your organization';
+    bioDesc = 'Tell us a little about your organization';
+  }
+
   return (
     <section className="container">
       <h1 className="large text-primary">
@@ -64,7 +97,7 @@ const ProfileForm = ({
       <p className="lead">
         <i className="fas fa-user" />
         {creatingProfile
-          ? ` Let's get some information to make your`
+          ? ` Let's get some information to make your profile`
           : ' Add some changes to your profile'}
       </p>
       <small>* = required field</small>
@@ -77,7 +110,7 @@ const ProfileForm = ({
             value={city}
             onChange={onChange}
           />
-          <small className="form-text">The city you live in</small>
+          <small className="form-text">{cityDesc}</small>
         </div>
         <div className="form-group">
           <select name="state" value={state} onChange={onChange}>
@@ -133,29 +166,17 @@ const ProfileForm = ({
             <option value="Wisconsin">WI</option>
             <option value="Wyoming">WY</option>
           </select>
-          <small className="form-text">Select which state you live in</small>
+          <small className="form-text">{stateDesc}</small>
         </div>
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="* Skills"
-            name="skills"
-            value={skills}
-            onChange={onChange}
-          />
-          <small className="form-text">
-            Please use comma separated values (eg. Painting, Cooking, Software
-            Engineering)
-          </small>
-        </div>
+        {skillsDisplay}
         <div className="form-group">
           <textarea
-            placeholder="A short bio of yourself"
+            placeholder={bioText}
             name="bio"
             value={bio}
             onChange={onChange}
           />
-          <small className="form-text">Tell us a little about yourself</small>
+          <small className="form-text">{bioDesc}</small>
         </div>
 
         <input type="submit" className="btn btn-primary my-1" />
@@ -170,11 +191,13 @@ const ProfileForm = ({
 ProfileForm.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  profile: state.profile
+  profile: state.profile,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(

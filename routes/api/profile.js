@@ -16,7 +16,7 @@ router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id
-    }).populate('user', ['name', 'avatar']);
+    }).populate('user', ['name', 'type']);
 
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
@@ -37,19 +37,19 @@ router.post(
   auth,
   check('city', 'City is required').notEmpty(),
   check('state', 'State is required').notEmpty(),
-  check('skills', 'Skills is required').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // destructure the request
-    const {
-      skills,
-      // spread the rest of the fields we don't need to check
-      ...rest
-    } = req.body;
+    const { skills, ...rest } = req.body;
+
+    if (req.user.type === 'Volunteer') {
+      if (!skills) {
+        return res.status(400).send('Skills is required');
+      }
+    }
 
     // build a profile
     const profileFields = {
@@ -80,7 +80,7 @@ router.post(
 // @access   Public
 router.get('/', async (req, res) => {
   try {
-    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    const profiles = await Profile.find().populate('user', ['name', 'type']);
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
@@ -98,7 +98,7 @@ router.get(
     try {
       const profile = await Profile.findOne({
         user: user_id
-      }).populate('user', ['name', 'avatar']);
+      }).populate('user', ['name', 'type']);
 
       if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 
