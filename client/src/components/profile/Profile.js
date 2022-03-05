@@ -26,6 +26,13 @@ const Profile = ({
     }
   }, [getProfileById, getCurrentProfile, id]);
 
+  let backButtonText;
+  if (auth.user.type === 'Volunteer') {
+    backButtonText = 'Back To Volunteers';
+  } else {
+    backButtonText = 'Back To Organizers';
+  }
+
   return (
     <section className="container">
       {profile === null ? (
@@ -33,7 +40,7 @@ const Profile = ({
       ) : (
         <Fragment>
           <Link to="/profiles" className="btn btn-light">
-            Back To Volunteers
+            {backButtonText}
           </Link>
           {auth.isAuthenticated &&
             auth.loading === false &&
