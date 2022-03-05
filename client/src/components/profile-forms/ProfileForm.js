@@ -58,6 +58,10 @@ const ProfileForm = ({
   };
 
   let skillsDisplay;
+  let cityDesc;
+  let stateDesc;
+  let bioText;
+  let bioDesc;
   if (user.type === 'Volunteer') {
     skillsDisplay = (
       <div className="form-group">
@@ -74,6 +78,15 @@ const ProfileForm = ({
         </small>
       </div>
     );
+    cityDesc = 'The city you live in';
+    stateDesc = 'Select which state you live in';
+    bioText = 'A short bio of yourself';
+    bioDesc = 'Tell us a little about yourself';
+  } else {
+    cityDesc = 'The city your organization is in';
+    stateDesc = 'Select the state your organization is in';
+    bioText = 'A short bio of your organization';
+    bioDesc = 'Tell us a little about your organization';
   }
 
   return (
@@ -84,7 +97,7 @@ const ProfileForm = ({
       <p className="lead">
         <i className="fas fa-user" />
         {creatingProfile
-          ? ` Let's get some information to make your`
+          ? ` Let's get some information to make your profile`
           : ' Add some changes to your profile'}
       </p>
       <small>* = required field</small>
@@ -97,7 +110,7 @@ const ProfileForm = ({
             value={city}
             onChange={onChange}
           />
-          <small className="form-text">The city you live in</small>
+          <small className="form-text">{cityDesc}</small>
         </div>
         <div className="form-group">
           <select name="state" value={state} onChange={onChange}>
@@ -153,17 +166,17 @@ const ProfileForm = ({
             <option value="Wisconsin">WI</option>
             <option value="Wyoming">WY</option>
           </select>
-          <small className="form-text">Select which state you live in</small>
+          <small className="form-text">{stateDesc}</small>
         </div>
         {skillsDisplay}
         <div className="form-group">
           <textarea
-            placeholder="A short bio of yourself"
+            placeholder={bioText}
             name="bio"
             value={bio}
             onChange={onChange}
           />
-          <small className="form-text">Tell us a little about yourself</small>
+          <small className="form-text">{bioDesc}</small>
         </div>
 
         <input type="submit" className="btn btn-primary my-1" />
