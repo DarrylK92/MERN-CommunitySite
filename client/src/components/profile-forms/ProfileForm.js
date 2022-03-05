@@ -19,7 +19,8 @@ const initialState = {
 const ProfileForm = ({
   profile: { profile, loading },
   createProfile,
-  getCurrentProfile
+  getCurrentProfile,
+  user
 }) => {
   const [formData, setFormData] = useState(initialState);
 
@@ -44,7 +45,7 @@ const ProfileForm = ({
       // set local state with the profileData
       setFormData(profileData);
     }
-  }, [loading, getCurrentProfile, profile]);
+  }, [loading, getCurrentProfile, profile, user]);
 
   const { city, state, bio, skills } = formData;
 
@@ -55,6 +56,25 @@ const ProfileForm = ({
     e.preventDefault();
     createProfile(formData, navigate, profile ? true : false);
   };
+
+  let skillsDisplay;
+  if (user.type === 'Volunteer') {
+    skillsDisplay = (
+      <div className="form-group">
+        <input
+          type="text"
+          placeholder="* Skills"
+          name="skills"
+          value={skills}
+          onChange={onChange}
+        />
+        <small className="form-text">
+          Please use comma separated values (eg. Painting, Cooking, Software
+          Engineering)
+        </small>
+      </div>
+    );
+  }
 
   return (
     <section className="container">
@@ -135,19 +155,7 @@ const ProfileForm = ({
           </select>
           <small className="form-text">Select which state you live in</small>
         </div>
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="* Skills"
-            name="skills"
-            value={skills}
-            onChange={onChange}
-          />
-          <small className="form-text">
-            Please use comma separated values (eg. Painting, Cooking, Software
-            Engineering)
-          </small>
-        </div>
+        {skillsDisplay}
         <div className="form-group">
           <textarea
             placeholder="A short bio of yourself"
@@ -170,11 +178,13 @@ const ProfileForm = ({
 ProfileForm.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  profile: state.profile
+  profile: state.profile,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
