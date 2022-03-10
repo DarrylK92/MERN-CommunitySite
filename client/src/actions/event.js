@@ -21,7 +21,7 @@ export const createEvent =
         payload: res.data
       });
 
-      dispatch(setAlsert(edit ? 'Event Updated' : 'Event Created', 'success'));
+      dispatch(setAlert(edit ? 'Event Updated' : 'Event Created', 'success'));
 
       if (!edit) {
         navigate('/dashboard');
