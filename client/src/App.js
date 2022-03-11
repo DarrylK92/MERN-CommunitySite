@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import ProfileForm from './components/profile-forms/ProfileForm';
+import EventForm from './components/event/EventForm';
 import Profile from './components/profile/Profile';
 import Dashboard from './components/dashboard/Dashboard';
 import Alert from './components/layout/Alert';
@@ -55,6 +56,10 @@ const App = () => {
           <Route
             path="edit-profile"
             element={<PrivateRoute component={ProfileForm} />}
+          />
+          <Route
+            path="create-event"
+            element={<PrivateRoute component={EventForm} />}
           />
           <Route
             path="dashboard"
