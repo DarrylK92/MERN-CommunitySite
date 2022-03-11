@@ -16,7 +16,7 @@ const DashboardActions = ({ user }) => {
   if (user !== null) {
     if (user.type === 'Organizer') {
       extraButtonsDisplay = (
-        <Link to="/add-event" className="btn btn-light">
+        <Link to="/create-event" className="btn btn-light">
           <i className="fas fa-plus-square text-primary" /> Add Event
         </Link>
       );
