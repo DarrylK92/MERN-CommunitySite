@@ -32,6 +32,25 @@ router.get(
   }
 );
 
+// @route    GET api/event/all/:user_id
+// @desc     Get events by user ID
+// @access   Public
+router.get(
+  '/all/:user_id',
+  checkObjectId('user_id'),
+  async ({ params: { user_id } }, res) => {
+    try {
+      const events = await Event.find({ user: user_id });
+
+      res.json(events);
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
 // @route    POST api/event
 // @desc     Create an event
 // @access   Private
