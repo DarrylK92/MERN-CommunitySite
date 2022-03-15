@@ -6,6 +6,7 @@ import {
   EVENT_DELETED,
   EVENT_UPDATED,
   GET_EVENT,
+  GET_EVENTS,
   EVENT_ERROR
 } from './types';
 
@@ -39,3 +40,33 @@ export const createEvent =
       });
     }
   };
+
+//Delete event
+export const deleteEvent = (id) => async (dispatch) => {
+  try {
+    const res = await api.delete(`/event/${id}`);
+
+    dispatch({
+      type: EVENT_DELETED
+    });
+
+    dispatch(setAlert('Event deleted'));
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Get all events for user
+export const getAllEvents = (id) => async (dispatch) => {
+  try {
+    const res = await api.get(`/event/all/${id}`);
+
+    dispatch({
+      type: GET_EVENTS,
+      payload: res.data
+    });
+  } catch (err) {}
+};
