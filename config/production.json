@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://lewis123:luPass2822!@communitysite.aor98.mongodb.net/main?retryWrites=true&w=majority",
+    "jwtSecret": "secrettokenforcapstone"
+}
