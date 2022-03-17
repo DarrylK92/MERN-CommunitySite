@@ -15,10 +15,12 @@ const Dashboard = ({
   profile: { profile }
 }) => {
   useEffect(() => {
+    getCurrentProfile();
     if (user !== null) {
       getAllEvents(user._id);
+    } else {
+      window.location.reload(false);
     }
-    getCurrentProfile();
   }, [getCurrentProfile, getAllEvents]);
 
   return (
