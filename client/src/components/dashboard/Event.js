@@ -32,7 +32,6 @@ const Event = ({ createEvent, deleteEvent, event: { events } }) => {
             </button>
           </td>
         </tr>
-        ;
       </>
     ));
   }
