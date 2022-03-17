@@ -4,16 +4,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createEvent } from '../../actions/event';
 
+const initialState = {
+  name: '',
+  date: '',
+  description: '',
+  address: '',
+  city: '',
+  state: ''
+};
+
 const AddEvent = ({ createEvent }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    date: '',
-    description: '',
-    address: '',
-    city: '',
-    state: ''
-  });
+  const [formData, setFormData] = useState(initialState);
 
   const { name, date, description, address, city, state } = formData;
 
