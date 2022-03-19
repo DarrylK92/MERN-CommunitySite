@@ -1,35 +1,72 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createEvent } from '../../actions/event';
+import { createEvent, getEvent } from '../../actions/event';
+const moment = require('moment');
 
-const AddEvent = ({ createEvent }) => {
+let initialState = {
+  name: '',
+  date: '',
+  description: '',
+  address: '',
+  city: '',
+  state: '',
+  _id: ''
+};
+
+const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    date: '',
-    description: '',
-    address: '',
-    city: '',
-    state: ''
-  });
+  const [formData, setFormData] = useState(initialState);
+
+  const { id } = useParams();
+  useEffect(() => {
+    if (id !== null && id !== undefined) {
+      if (event === null) {
+        getEvent(id);
+      }
+
+      if (!loading && event) {
+        const eventData = { ...initialState };
+        for (const key in event) {
+          if (key in eventData) eventData[key] = event[key];
+
+          if (key == 'date') {
+            eventData[key] = moment(event[key]).format('YYYY-MM-DD');
+          }
+        }
+
+        setFormData(eventData);
+      }
+    }
+  }, [loading, getEvent, event]);
 
   const { name, date, description, address, city, state } = formData;
+
+  let titleText = 'Add Event';
+
+  if (id !== null && id !== undefined) {
+    titleText = 'Edit Event';
+  }
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   return (
     <section className="container">
-      <h1 className="large text-primary">Add Event</h1>
+      <h1 className="large text-primary">{titleText}</h1>
       <p className="lead">Event details:</p>
       <small>* = required field</small>
       <form
         className="form"
         onSubmit={(e) => {
           e.preventDefault();
-          createEvent(formData, navigate);
+
+          if (id !== null && id !== undefined) {
+            createEvent(formData, navigate, true);
+          } else {
+            createEvent(formData, navigate);
+          }
         }}
       >
         <div className="form-group">
@@ -78,56 +115,56 @@ const AddEvent = ({ createEvent }) => {
           <div className="form-group">
             <select name="state" value={state} onChange={onChange}>
               <option>* Select State</option>
-              <option value="Alabama">AL</option>
-              <option value="Alaska">AK</option>
-              <option value="Arizona">AZ</option>
-              <option value="Arkansas">AR</option>
-              <option value="California">CA</option>
-              <option value="Colorado">CO</option>
-              <option value="Connecticut">CT</option>
-              <option value="Delaware">DE</option>
-              <option value="Florida">FL</option>
-              <option value="Georgia">GA</option>
-              <option value="Hawaii">HI</option>
-              <option value="Idaho">ID</option>
-              <option value="Illinois">IL</option>
-              <option value="Indiana">IN</option>
-              <option value="Iowa">IA</option>
-              <option value="Kansas">KS</option>
-              <option value="Kentucky">KY</option>
-              <option value="Louisiana">LA</option>
-              <option value="Maine">ME</option>
-              <option value="Maryland">MD</option>
-              <option value="Massachusetts">MA</option>
-              <option value="Michigan">MI</option>
-              <option value="Minnesota">MN</option>
-              <option value="Mississippi">MS</option>
-              <option value="Missouri">MO</option>
-              <option value="Montana">MT</option>
-              <option value="Nebraska">NE</option>
-              <option value="Nevada">NV</option>
-              <option value="New Hampshire">NH</option>
-              <option value="New Jersey">NJ</option>
-              <option value="New Mexico">NM</option>
-              <option value="New York">NY</option>
-              <option value="North Carolina">NC</option>
-              <option value="North Dakota">ND</option>
-              <option value="Ohio">OH</option>
-              <option value="Oklahoma">OK</option>
-              <option value="Oregon">OR</option>
-              <option value="Pennsylvania">PA</option>
-              <option value="Rhode Island">RI</option>
-              <option value="South Carolina">SC</option>
-              <option value="South Dakota">SD</option>
-              <option value="Tennessee">TN</option>
-              <option value="Texas">TX</option>
-              <option value="Utah">UT</option>
-              <option value="Vermont">VT</option>
-              <option value="Virginia">VA</option>
-              <option value="Washington">WA</option>
-              <option value="West Virginia">WV</option>
-              <option value="Wisconsin">WI</option>
-              <option value="Wyoming">WY</option>
+              <option value="AL">AL</option>
+              <option value="AK">AK</option>
+              <option value="AZ">AZ</option>
+              <option value="AR">AR</option>
+              <option value="CA">CA</option>
+              <option value="CO">CO</option>
+              <option value="CT">CT</option>
+              <option value="DE">DE</option>
+              <option value="FL">FL</option>
+              <option value="GA">GA</option>
+              <option value="HI">HI</option>
+              <option value="ID">ID</option>
+              <option value="IL">IL</option>
+              <option value="IN">IN</option>
+              <option value="IA">IA</option>
+              <option value="KS">KS</option>
+              <option value="KY">KY</option>
+              <option value="LA">LA</option>
+              <option value="ME">ME</option>
+              <option value="MD">MD</option>
+              <option value="MA">MA</option>
+              <option value="MI">MI</option>
+              <option value="MN">MN</option>
+              <option value="MS">MS</option>
+              <option value="MO">MO</option>
+              <option value="MT">MT</option>
+              <option value="NE">NE</option>
+              <option value="NV">NV</option>
+              <option value="NH">NH</option>
+              <option value="NJ">NJ</option>
+              <option value="NM">NM</option>
+              <option value="NY">NY</option>
+              <option value="NC">NC</option>
+              <option value="ND">ND</option>
+              <option value="OH">OH</option>
+              <option value="OK">OK</option>
+              <option value="OR">OR</option>
+              <option value="PA">PA</option>
+              <option value="RI">RI</option>
+              <option value="SC">SC</option>
+              <option value="SD">SD</option>
+              <option value="TN">TN</option>
+              <option value="TX">TX</option>
+              <option value="UT">UT</option>
+              <option value="VT">VT</option>
+              <option value="VA">VA</option>
+              <option value="WA">WA</option>
+              <option value="WV">WV</option>
+              <option value="WI">WI</option>
+              <option value="WY">WY</option>
             </select>
             <small className="form-text">Event State</small>
           </div>
@@ -142,7 +179,13 @@ const AddEvent = ({ createEvent }) => {
 };
 
 AddEvent.propTypes = {
-  createEvent: PropTypes.func.isRequired
+  createEvent: PropTypes.func.isRequired,
+  getEvent: PropTypes.func.isRequired,
+  event: PropTypes.object.isRequired
 };
 
-export default connect(null, { createEvent })(AddEvent);
+const mapStateToProps = (state) => ({
+  event: state.event
+});
+
+export default connect(mapStateToProps, { createEvent, getEvent })(AddEvent);

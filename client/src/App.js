@@ -62,6 +62,10 @@ const App = () => {
             element={<PrivateRoute component={EventForm} />}
           />
           <Route
+            path="edit-event/:id"
+            element={<PrivateRoute component={EventForm} />}
+          />
+          <Route
             path="dashboard"
             element={<PrivateRoute component={Dashboard} />}
           />

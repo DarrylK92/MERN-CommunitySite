@@ -17,4 +17,6 @@ export const EVENT_CREATED = 'EVENT_CREATED';
 export const EVENT_DELETED = 'EVENT_DELETED';
 export const EVENT_UPDATED = 'EVENT_UPDATED';
 export const GET_EVENT = 'GET_EVENT';
+export const GET_EVENTS = 'GET_EVENTS';
 export const EVENT_ERROR = 'EVENT_ERROR';
+export const CLEAR_EVENT = 'CLEAR_EVENT';

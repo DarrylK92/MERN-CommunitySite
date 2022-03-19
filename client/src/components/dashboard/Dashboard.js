@@ -4,16 +4,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DashboardActions from './DashboardActions';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
+import { getAllEvents, clearEvent } from '../../actions/event';
+import Event from './Event';
 
 const Dashboard = ({
   getCurrentProfile,
   deleteAccount,
+  getAllEvents,
+  clearEvent,
   auth: { user },
   profile: { profile }
 }) => {
   useEffect(() => {
     getCurrentProfile();
-  }, [getCurrentProfile]);
+    clearEvent();
+    if (user !== null) {
+      getAllEvents(user._id);
+    } else {
+      window.location.reload(false);
+    }
+  }, [getCurrentProfile, getAllEvents, clearEvent]);
 
   return (
     <section className="container">
@@ -24,6 +34,8 @@ const Dashboard = ({
       {profile !== null ? (
         <>
           <DashboardActions />
+
+          <Event />
 
           <div className="my-2">
             <button className="btn btn-danger" onClick={() => deleteAccount()}>
@@ -46,6 +58,8 @@ const Dashboard = ({
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   deleteAccount: PropTypes.func.isRequired,
+  getAllEvents: PropTypes.func.isRequired,
+  clearEvent: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 };
@@ -55,6 +69,9 @@ const mapStateToProps = (state) => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
-  Dashboard
-);
+export default connect(mapStateToProps, {
+  getCurrentProfile,
+  deleteAccount,
+  getAllEvents,
+  clearEvent
+})(Dashboard);

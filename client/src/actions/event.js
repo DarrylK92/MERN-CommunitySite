@@ -6,7 +6,9 @@ import {
   EVENT_DELETED,
   EVENT_UPDATED,
   GET_EVENT,
-  EVENT_ERROR
+  GET_EVENTS,
+  EVENT_ERROR,
+  CLEAR_EVENT
 } from './types';
 
 //Create or update event
@@ -39,3 +41,57 @@ export const createEvent =
       });
     }
   };
+
+//Delete event
+export const deleteEvent = (id) => async (dispatch) => {
+  try {
+    const res = await api.delete(`/event/${id}`);
+
+    dispatch({
+      type: EVENT_DELETED
+    });
+
+    dispatch(setAlert('Event deleted'));
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Get all events for user
+export const getAllEvents = (id) => async (dispatch) => {
+  try {
+    const res = await api.get(`/event/all/${id}`);
+
+    dispatch({
+      type: GET_EVENTS,
+      payload: res.data
+    });
+  } catch (err) {}
+};
+
+//Get event
+export const getEvent = (id) => async (dispatch) => {
+  try {
+    const res = await api.get(`event/${id}`);
+
+    dispatch({
+      type: GET_EVENT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Clear event
+export const clearEvent = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_EVENT
+  });
+};
