@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createEvent } from '../../actions/event';
+import { createEvent, getEvent } from '../../actions/event';
 
-const initialState = {
+let initialState = {
   name: '',
   date: '',
   description: '',
@@ -13,9 +13,25 @@ const initialState = {
   state: ''
 };
 
-const AddEvent = ({ createEvent }) => {
+const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
+
+  const { id } = useParams();
+  useEffect(() => {
+    if (id !== null) {
+      getEvent(id);
+    }
+
+    if (!loading && event) {
+      const eventData = { ...initialState };
+      for (const key in event) {
+        if (key in eventData) eventData[key] = event[key];
+      }
+
+      setFormData(eventData);
+    }
+  }, [loading, getEvent, event]);
 
   const { name, date, description, address, city, state } = formData;
 
@@ -144,7 +160,13 @@ const AddEvent = ({ createEvent }) => {
 };
 
 AddEvent.propTypes = {
-  createEvent: PropTypes.func.isRequired
+  createEvent: PropTypes.func.isRequired,
+  getEvent: PropTypes.func.isRequired,
+  event: PropTypes.object.isRequired
 };
 
-export default connect(null, { createEvent })(AddEvent);
+const mapStateToProps = (state) => ({
+  event: state.event
+});
+
+export default connect(mapStateToProps, { createEvent, getEvent })(AddEvent);
