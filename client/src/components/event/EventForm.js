@@ -20,7 +20,9 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
   const { id } = useParams();
   useEffect(() => {
     if (id !== null && id !== undefined) {
-      getEvent(id);
+      if (event === null) {
+        getEvent(id);
+      }
 
       if (!loading && event) {
         const eventData = { ...initialState };
