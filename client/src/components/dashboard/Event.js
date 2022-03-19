@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createEvent, deleteEvent } from '../../actions/event';
 import formatDate from '../../utils/formatDate';
 import Spinner from '../layout/Spinner';
+import { Link } from 'react-router-dom';
 
 const Event = ({ createEvent, deleteEvent, event: { events } }) => {
   let eventsContent;
@@ -16,11 +17,8 @@ const Event = ({ createEvent, deleteEvent, event: { events } }) => {
           <td className="hide-sm">{oneEvent.description}</td>
           <td>{formatDate(oneEvent.date)}</td>
           <td>
-            <button
-              onClick={() => createEvent(oneEvent._id)}
-              className="btn btn-secondary"
-            >
-              Edit
+            <button className="btn btn-secondary">
+              <Link to={'/edit-event/' + oneEvent._id}>Edit</Link>
             </button>
           </td>
           <td>
