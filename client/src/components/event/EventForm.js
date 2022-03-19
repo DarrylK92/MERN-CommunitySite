@@ -11,7 +11,8 @@ let initialState = {
   description: '',
   address: '',
   city: '',
-  state: ''
+  state: '',
+  _id: ''
 };
 
 const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {

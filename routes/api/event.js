@@ -82,18 +82,44 @@ router.post(
         return res.status(404).json({ msg: 'Event status not found' });
       }
 
-      const newEvent = new Event({
-        name: req.body.name,
-        date: req.body.date,
-        description: req.body.description,
-        address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        eventStats: eventStatus.id,
-        user: user.id
-      });
+      let event;
 
-      const event = await newEvent.save();
+      if (req.body._id !== '') {
+        try {
+          event = await Event.findOneAndUpdate(
+            { _id: req.body._id },
+            {
+              $set: {
+                name: req.body.name,
+                date: req.body.date,
+                description: req.body.description,
+                address: req.body.address,
+                city: req.body.city,
+                state: req.body.state,
+                eventStats: eventStatus.id,
+                user: user.id
+              }
+            },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+          );
+        } catch (err) {
+          console.error(err.message);
+          return res.status(500).send('Server Error');
+        }
+      } else {
+        event = new Event({
+          name: req.body.name,
+          date: req.body.date,
+          description: req.body.description,
+          address: req.body.address,
+          city: req.body.city,
+          state: req.body.state,
+          eventStats: eventStatus.id,
+          user: user.id
+        });
+
+        event = await event.save();
+      }
 
       res.json(event);
     } catch (err) {
