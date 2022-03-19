@@ -70,3 +70,20 @@ export const getAllEvents = (id) => async (dispatch) => {
     });
   } catch (err) {}
 };
+
+//Get event
+export const getEvent = (id) => async (dispatch) => {
+  try {
+    const res = await api.get(`event/${id}`);
+
+    dispatch({
+      type: GET_EVENT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
