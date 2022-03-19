@@ -7,7 +7,8 @@ import {
   EVENT_UPDATED,
   GET_EVENT,
   GET_EVENTS,
-  EVENT_ERROR
+  EVENT_ERROR,
+  CLEAR_EVENT
 } from './types';
 
 //Create or update event
@@ -86,4 +87,11 @@ export const getEvent = (id) => async (dispatch) => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
+};
+
+//Clear event
+export const clearEvent = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_EVENT
+  });
 };

@@ -4,24 +4,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DashboardActions from './DashboardActions';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
-import { getAllEvents } from '../../actions/event';
+import { getAllEvents, clearEvent } from '../../actions/event';
 import Event from './Event';
 
 const Dashboard = ({
   getCurrentProfile,
   deleteAccount,
   getAllEvents,
+  clearEvent,
   auth: { user },
   profile: { profile }
 }) => {
   useEffect(() => {
     getCurrentProfile();
+    clearEvent();
     if (user !== null) {
       getAllEvents(user._id);
     } else {
       window.location.reload(false);
     }
-  }, [getCurrentProfile, getAllEvents]);
+  }, [getCurrentProfile, getAllEvents, clearEvent]);
 
   return (
     <section className="container">
@@ -57,6 +59,7 @@ Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   deleteAccount: PropTypes.func.isRequired,
   getAllEvents: PropTypes.func.isRequired,
+  clearEvent: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 };
@@ -69,5 +72,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getCurrentProfile,
   deleteAccount,
-  getAllEvents
+  getAllEvents,
+  clearEvent
 })(Dashboard);
