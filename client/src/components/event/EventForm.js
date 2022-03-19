@@ -19,17 +19,17 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
 
   const { id } = useParams();
   useEffect(() => {
-    if (id !== null) {
+    if (id !== null && id !== undefined) {
       getEvent(id);
-    }
 
-    if (!loading && event) {
-      const eventData = { ...initialState };
-      for (const key in event) {
-        if (key in eventData) eventData[key] = event[key];
+      if (!loading && event) {
+        const eventData = { ...initialState };
+        for (const key in event) {
+          if (key in eventData) eventData[key] = event[key];
+        }
+
+        setFormData(eventData);
       }
-
-      setFormData(eventData);
     }
   }, [loading, getEvent, event]);
 
