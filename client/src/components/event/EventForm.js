@@ -61,7 +61,12 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
         className="form"
         onSubmit={(e) => {
           e.preventDefault();
-          createEvent(formData, navigate);
+
+          if (id !== null && id !== undefined) {
+            createEvent(formData, navigate, true);
+          } else {
+            createEvent(formData, navigate);
+          }
         }}
       >
         <div className="form-group">
