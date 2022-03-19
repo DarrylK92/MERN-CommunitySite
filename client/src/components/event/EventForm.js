@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createEvent, getEvent } from '../../actions/event';
+const moment = require('moment');
 
 let initialState = {
   name: '',
@@ -28,6 +29,10 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
         const eventData = { ...initialState };
         for (const key in event) {
           if (key in eventData) eventData[key] = event[key];
+
+          if (key == 'date') {
+            eventData[key] = moment(event[key]).format('YYYY-MM-DD');
+          }
         }
 
         setFormData(eventData);
