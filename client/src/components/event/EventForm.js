@@ -35,12 +35,18 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
 
   const { name, date, description, address, city, state } = formData;
 
+  let titleText = 'Add Event';
+
+  if (id !== null && id !== undefined) {
+    titleText = 'Edit Event';
+  }
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   return (
     <section className="container">
-      <h1 className="large text-primary">Add Event</h1>
+      <h1 className="large text-primary">{titleText}</h1>
       <p className="lead">Event details:</p>
       <small>* = required field</small>
       <form
