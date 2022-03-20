@@ -34,7 +34,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   return (
     <section className="container">
-      <h1 className="large text-primary">Sign Up</h1>
+      <h1 className="large text-primary">Volunteer Sign Up</h1>
       <p className="lead">
         <i className="fas fa-user" /> Create Your Account
       </p>
@@ -79,6 +79,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       </form>
       <p className="my-1">
         Already have an account? <Link to="/login">Sign In</Link>
+      </p>
+      <p className="my-1">
+        Create an organization account instead?{' '}
+        <Link to="/register-organization">Create Organization Account</Link>
       </p>
     </section>
   );
