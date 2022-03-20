@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
+import RegisterVolunteer from './components/auth/RegisterVolunteer';
+import RegisterOrganization from './components/auth/RegisterOrganization';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import ProfileForm from './components/profile-forms/ProfileForm';
@@ -44,6 +46,8 @@ const App = () => {
         <Alert />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="register-volunteer" element={<RegisterVolunteer />} />
+          <Route path="register-organization" element={<RegisterOrganization />} />
           <Route path="login" element={<Login />} />
           <Route
             path="profile/:id"
