@@ -9,8 +9,8 @@ const Landing = ({ isAuthenticated }) => {
     button = <div></div>;
   } else {
     button = (
-      <Link to="/login" class="btn btn-light">
-        Login
+      <Link to="/register-volunteer" className="btn btn-primary">
+        Sign Up
       </Link>
     );
   }
