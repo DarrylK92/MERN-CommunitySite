@@ -44,9 +44,18 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
   const { name, date, description, address, city, state } = formData;
 
   let titleText = 'Add Event';
+  let editPositionsDiv = null;
 
   if (id !== null && id !== undefined) {
     titleText = 'Edit Event';
+    let editPositionsLink = '/edit-event/edit-positions/' + id;
+    editPositionsDiv = (
+      <div>
+        <Link className="btn btn-light my-1" to={editPositionsLink}>
+          Edit positions
+        </Link>
+      </div>
+    );
   }
 
   const onChange = (e) =>
@@ -169,6 +178,7 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
             <small className="form-text">Event State</small>
           </div>
         </div>
+        {editPositionsDiv}
         <input type="submit" className="btn btn-primary my-1" />
         <Link className="btn btn-light my-1" to="/dashboard">
           Go Back
