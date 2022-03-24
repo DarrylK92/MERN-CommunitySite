@@ -6,6 +6,7 @@ import RegisterOrganization from './components/auth/RegisterOrganization';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import ProfileForm from './components/profile-forms/ProfileForm';
+import PositionsList from './components/event/PositionsList';
 import EventForm from './components/event/EventForm';
 import Profile from './components/profile/Profile';
 import Dashboard from './components/dashboard/Dashboard';
@@ -47,7 +48,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="register-volunteer" element={<RegisterVolunteer />} />
-          <Route path="register-organization" element={<RegisterOrganization />} />
+          <Route
+            path="register-organization"
+            element={<RegisterOrganization />}
+          />
           <Route path="login" element={<Login />} />
           <Route
             path="profile/:id"
@@ -68,6 +72,10 @@ const App = () => {
           <Route
             path="edit-event/:id"
             element={<PrivateRoute component={EventForm} />}
+          />
+          <Route
+            path="edit-event/edit-positions/:event_id"
+            element={<PrivateRoute component={PositionsList} />}
           />
           <Route
             path="dashboard"
