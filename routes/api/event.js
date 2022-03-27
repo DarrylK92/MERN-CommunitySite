@@ -212,7 +212,7 @@ router.delete(
 );
 
 // @route    POST api/event/position/:event_id
-// @desc     Create an event
+// @desc     Create an position
 // @access   Private
 router.post(
   '/position/:event_id',
