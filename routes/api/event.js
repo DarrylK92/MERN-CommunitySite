@@ -218,6 +218,7 @@ router.post(
   '/position/:event_id',
   [auth, checkObjectId('event_id')],
   check('name', 'Name is required').notEmpty(),
+  check('amount', 'Amount is required').notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -233,20 +234,22 @@ router.post(
 
       const { name, requestedSkills } = req.body;
 
-      const newPosition = {
-        name: name,
-        requestedSkills: Array.isArray(requestedSkills)
-          ? requestedSkills
-          : requestedSkills
-              .split(',')
-              .map((requestedSkills) => requestedSkills.trim())
-      };
+      for (var i = 0; i < req.body.amount; i++) {
+        const newPosition = {
+          name: name,
+          requestedSkills: Array.isArray(requestedSkills)
+            ? requestedSkills
+            : requestedSkills
+                .split(',')
+                .map((requestedSkills) => requestedSkills.trim())
+        };
 
-      event.positions.push(newPosition);
+        event.positions.push(newPosition);
 
-      await event.save();
+        await event.save();
+      }
 
-      res.json(event.positions);
+      res.json(event);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

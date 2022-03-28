@@ -26,13 +26,14 @@ const PositionsList = ({ event: { event } }) => {
   console.log(event_id);
 
   let goBackLink = '/edit-event/' + event_id;
+  let addPositionLink = '/edit-event/add-position/' + event_id;
 
   return (
     <section className="container">
       <h1 className="large text-primary">Edit Positions</h1>
       <p className="lead">{eventText}</p>
       <>
-        <Link to="/create-position" className="btn btn-light">
+        <Link to={addPositionLink} className="btn btn-light">
           <i className="fas fa-plus-square text-primary" /> Add Position
         </Link>
       </>
