@@ -83,7 +83,7 @@ const App = () => {
             element={<PrivateRoute component={PositionForm} />}
           />
           <Route
-            path="edit-event/add-position/:event_id/:position_id"
+            path="edit-event/edit-position/:event_id/:position_id"
             element={<PrivateRoute component={PositionForm} />}
           />
           <Route

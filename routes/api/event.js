@@ -211,8 +211,49 @@ router.delete(
   }
 );
 
+// @route    GET api/event/position/:event_id/:position_id
+// @desc     Get a position
+// @access   Private
+router.get(
+  '/position/:event_id/:position_id',
+  [auth, checkObjectId('event_id'), checkObjectId('position_id')],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const event = await Event.findById(req.params.event_id);
+
+      if (!event) {
+        return res.status(404).json({ msg: 'Event not found' });
+      }
+
+      const positions = event.positions;
+      let position;
+      let posId = '"' + req.params.position_id + '"';
+
+      positions.forEach((element) => {
+        if (JSON.stringify(element._id) === posId) {
+          position = element;
+        }
+      });
+
+      if (position === null || position === undefined) {
+        return res.status(404).json({ msg: 'Position not found' });
+      }
+
+      return res.json(position);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
 // @route    POST api/event/position/:event_id
-// @desc     Create an position
+// @desc     Create a position
 // @access   Private
 router.post(
   '/position/:event_id',
@@ -232,7 +273,23 @@ router.post(
         return res.status(404).json({ msg: 'Event not found' });
       }
 
-      const { name, requestedSkills } = req.body;
+      const { name, requestedSkills, _id } = req.body;
+
+      if (_id !== null && _id !== undefined) {
+        positions = event.positions;
+        let position;
+        let posId = '"' + _id + '"';
+
+        positions.forEach((element) => {
+          if (JSON.stringify(element._id) === posId) {
+            position = element;
+          }
+        });
+
+        event.positions = event.positions.filter(function (obj) {
+          return obj._id !== position._id;
+        });
+      }
 
       for (var i = 0; i < req.body.amount; i++) {
         const newPosition = {

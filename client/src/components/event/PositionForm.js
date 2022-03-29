@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createPosition } from '../../actions/event';
+import { createPosition, getPosition } from '../../actions/event';
 
 let initialState = {
   name: '',
@@ -11,11 +11,29 @@ let initialState = {
   _id: ''
 };
 
-const AddPosition = ({ createPosition, position }) => {
+const AddPosition = ({ createPosition, getPosition }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
 
   const { event_id, position_id } = useParams();
+
+  useEffect(() => {
+    let position;
+
+    getPosition(event_id, position_id).then(function (data) {
+      position = data.data;
+
+      let positionData = { ...initialState };
+      if (position !== null && position !== undefined) {
+        for (const key in position) {
+          if (key in positionData) {
+            positionData[key] = position[key];
+          }
+        }
+      }
+      setFormData(positionData);
+    });
+  }, []);
 
   const { name, requestedSkills, amount, _id } = formData;
 
@@ -86,7 +104,8 @@ const AddPosition = ({ createPosition, position }) => {
 };
 
 AddPosition.propTypes = {
-  createPosition: PropTypes.func.isRequired
+  createPosition: PropTypes.func.isRequired,
+  getPosition: PropTypes.func.isRequired
 };
 
-export default connect(null, { createPosition })(AddPosition);
+export default connect(null, { createPosition, getPosition })(AddPosition);

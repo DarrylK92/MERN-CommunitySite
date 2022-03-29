@@ -17,13 +17,26 @@ const PositionsList = ({ event: { event } }) => {
           <td>{onePosition.name}</td>
           <td>{onePosition.requestedSkills.join(', ')}</td>
           <td>{onePosition.volunteer == '' ? 'Empty' : 'Filled'}</td>
+          <td>
+            <button className="btn btn-secondary">
+              <Link
+                to={
+                  '/edit-event/edit-position/' +
+                  event._id +
+                  '/' +
+                  onePosition._id
+                }
+              >
+                Edit
+              </Link>
+            </button>
+          </td>
         </tr>
       </>
     ));
   }
 
   const { event_id } = useParams();
-  console.log(event_id);
 
   let goBackLink = '/edit-event/' + event_id;
   let addPositionLink = '/edit-event/add-position/' + event_id;

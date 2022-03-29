@@ -112,9 +112,7 @@ export const createPosition =
         setAlert(edit ? 'Position Updated' : 'Position Created', 'success')
       );
 
-      if (!edit) {
-        navigate('/edit-event/edit-positions/' + formData.id);
-      }
+      navigate('/edit-event/edit-positions/' + formData.id);
     } catch (err) {
       const errors = err.response.data.errors;
 
@@ -128,3 +126,23 @@ export const createPosition =
       });
     }
   };
+
+//Get position data
+export const getPosition = (event_id, position_id) => async (dispatch) => {
+  try {
+    const res = await api.get(`/event/position/${event_id}/${position_id}`);
+
+    return res;
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
