@@ -20,32 +20,49 @@ const AddPosition = ({ createPosition, getPosition }) => {
   useEffect(() => {
     let position;
 
-    getPosition(event_id, position_id).then(function (data) {
-      position = data.data;
+    if (position_id !== null && position_id !== undefined) {
+      getPosition(event_id, position_id).then(function (data) {
+        position = data.data;
 
-      let positionData = { ...initialState };
-      if (position !== null && position !== undefined) {
-        for (const key in position) {
-          if (key in positionData) {
-            positionData[key] = position[key];
+        let positionData = { ...initialState };
+        if (position !== null && position !== undefined) {
+          for (const key in position) {
+            if (key in positionData) {
+              positionData[key] = position[key];
+            }
           }
         }
-      }
-      setFormData(positionData);
-    });
+        setFormData(positionData);
+      });
+    }
   }, []);
+
+  let amountDisplay;
 
   const { name, requestedSkills, amount, _id } = formData;
 
   let titleText = 'Add Position';
   let goBackLink = '/edit-event/edit-positions/' + event_id;
 
-  if (position_id !== null && position_id !== undefined) {
-    titleText = 'Edit Position';
-  }
-
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  if (position_id !== null && position_id !== undefined) {
+    titleText = 'Edit Position';
+  } else {
+    amountDisplay = (
+      <div className="form-group">
+        <input
+          type="text"
+          placeholder="* Amount"
+          name="amount"
+          value={amount}
+          onChange={onChange}
+          required
+        />
+      </div>
+    );
+  }
 
   return (
     <section className="container">
@@ -83,16 +100,7 @@ const AddPosition = ({ createPosition, getPosition }) => {
               onChange={onChange}
             />
           </div>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="* Amount"
-              name="amount"
-              value={amount}
-              onChange={onChange}
-              required
-            />
-          </div>
+          {amountDisplay}
         </div>
         <input type="submit" className="btn btn-primary my-1" />
         <Link className="btn btn-light my-1" to={goBackLink}>

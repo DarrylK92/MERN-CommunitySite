@@ -275,7 +275,7 @@ router.post(
 
       const { name, requestedSkills, _id } = req.body;
 
-      if (_id !== null && _id !== undefined) {
+      if (_id !== null && _id !== undefined && _id !== '') {
         positions = event.positions;
         let position;
         let posId = '"' + _id + '"';
