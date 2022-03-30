@@ -2,15 +2,19 @@ import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { deletePosition } from '../../actions/event';
-import { getEvent } from '../../actions/event';
+import { getEvent, deletePosition, deleteVolunteer } from '../../actions/event';
 
-const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
+const PositionsList = ({
+  deletePosition,
+  getEvent,
+  deleteVolunteer,
+  event: { event }
+}) => {
   let eventId = event._id;
 
   useEffect(() => {
     getEvent(eventId);
-  }, [getEvent, event]);
+  }, [getEvent, deleteVolunteer]);
 
   let eventText = '';
 
@@ -24,7 +28,7 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
         <tr key={onePosition.id}>
           <td>{onePosition.name}</td>
           <td>{onePosition.requestedSkills.join(', ')}</td>
-          <td>{onePosition.volunteer == '' ? 'Empty' : 'Filled'}</td>
+          <td>{onePosition.volunteer == undefined || onePosition.volunteer == null ? 'Empty' : 'Filled'}</td>
           <td>
             <button className="btn btn-secondary">
               <Link
@@ -43,11 +47,25 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
             <button
               onClick={() => {
                 deletePosition(eventId, onePosition._id);
+                getEvent(eventId);
               }}
               className="btn btn-danger"
             >
               Delete
             </button>
+          </td>
+          <td>
+            {onePosition.volunteer !== undefined && onePosition.volunteer !== null && (
+              <button
+                onClick={() => {
+                  deleteVolunteer(eventId, onePosition._id);
+                  getEvent(eventId);
+                }}
+                className="btn btn-danger"
+              >
+                Remove volunteer
+              </button>
+            )}
           </td>
         </tr>
       </>
@@ -79,6 +97,7 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
                 <th className="hide-sm">Status</th>
                 <th />
                 <th />
+                <th />
               </tr>
             </thead>
             <tbody>{positionsContent}</tbody>
@@ -101,13 +120,16 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
 Event.PropTypes = {
   event: PropTypes.object.isRequired,
   deletePosition: PropTypes.func.isRequired,
-  getEvent: PropTypes.func.isRequired
+  getEvent: PropTypes.func.isRequired,
+  deleteVolunteer: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   event: state.event
 });
 
-export default connect(mapStateToProps, { deletePosition, getEvent })(
-  PositionsList
-);
+export default connect(mapStateToProps, {
+  deletePosition,
+  getEvent,
+  deleteVolunteer
+})(PositionsList);
