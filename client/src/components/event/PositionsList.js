@@ -10,7 +10,7 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
 
   useEffect(() => {
     getEvent(eventId);
-  }, [getEvent, event]);
+  }, [getEvent]);
 
   let eventText = '';
 
@@ -24,7 +24,7 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
         <tr key={onePosition.id}>
           <td>{onePosition.name}</td>
           <td>{onePosition.requestedSkills.join(', ')}</td>
-          <td>{onePosition.volunteer == '' ? 'Empty' : 'Filled'}</td>
+          <td>{onePosition.volunteer == undefined ? 'Empty' : 'Filled'}</td>
           <td>
             <button className="btn btn-secondary">
               <Link
@@ -43,6 +43,7 @@ const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
             <button
               onClick={() => {
                 deletePosition(eventId, onePosition._id);
+                getEvent(eventId);
               }}
               className="btn btn-danger"
             >
