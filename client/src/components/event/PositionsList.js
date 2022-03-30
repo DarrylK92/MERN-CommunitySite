@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deletePosition } from '../../actions/event';
+import { getEvent } from '../../actions/event';
 
-const PositionsList = ({ deletePosition, event: { event } }) => {
+const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
+  let eventId = event._id;
+
+  useEffect(() => {
+    getEvent(eventId);
+  }, [getEvent, event]);
+
   let eventText = '';
 
   eventText = 'Event: ' + event.name;
-
-  let eventId = event._id;
 
   let positionsContent;
 
@@ -95,11 +100,14 @@ const PositionsList = ({ deletePosition, event: { event } }) => {
 
 Event.PropTypes = {
   event: PropTypes.object.isRequired,
-  deletePosition: PropTypes.func.isRequired
+  deletePosition: PropTypes.func.isRequired,
+  getEvent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   event: state.event
 });
 
-export default connect(mapStateToProps, { deletePosition })(PositionsList);
+export default connect(mapStateToProps, { deletePosition, getEvent })(
+  PositionsList
+);
