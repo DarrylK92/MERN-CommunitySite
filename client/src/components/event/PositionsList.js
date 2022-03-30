@@ -2,11 +2,14 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { deletePosition } from '../../actions/event';
 
-const PositionsList = ({ event: { event } }) => {
+const PositionsList = ({ deletePosition, event: { event } }) => {
   let eventText = '';
 
   eventText = 'Event: ' + event.name;
+
+  let eventId = event._id;
 
   let positionsContent;
 
@@ -29,6 +32,16 @@ const PositionsList = ({ event: { event } }) => {
               >
                 Edit
               </Link>
+            </button>
+          </td>
+          <td>
+            <button
+              onClick={() => {
+                deletePosition(eventId, onePosition._id);
+              }}
+              className="btn btn-danger"
+            >
+              Delete
             </button>
           </td>
         </tr>
@@ -81,11 +94,12 @@ const PositionsList = ({ event: { event } }) => {
 };
 
 Event.PropTypes = {
-  event: PropTypes.object.isRequired
+  event: PropTypes.object.isRequired,
+  deletePosition: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   event: state.event
 });
 
-export default connect(mapStateToProps, null)(PositionsList);
+export default connect(mapStateToProps, { deletePosition })(PositionsList);

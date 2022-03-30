@@ -146,3 +146,21 @@ export const getPosition = (event_id, position_id) => async (dispatch) => {
     });
   }
 };
+
+//Delete position
+export const deletePosition = (event_id, position_id) => async (dispatch) => {
+  try {
+    const res = await api.delete(`/event/position/${event_id}/${position_id}`);
+
+    dispatch({
+      type: EVENT_DELETED
+    });
+
+    dispatch(setAlert('Position deleted'));
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
