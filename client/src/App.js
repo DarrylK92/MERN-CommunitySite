@@ -8,6 +8,7 @@ import Login from './components/auth/Login';
 import ProfileForm from './components/profile-forms/ProfileForm';
 import PositionsList from './components/event/PositionsList';
 import EventForm from './components/event/EventForm';
+import PositionForm from './components/event/PositionForm';
 import Profile from './components/profile/Profile';
 import Dashboard from './components/dashboard/Dashboard';
 import Alert from './components/layout/Alert';
@@ -76,6 +77,14 @@ const App = () => {
           <Route
             path="edit-event/edit-positions/:event_id"
             element={<PrivateRoute component={PositionsList} />}
+          />
+          <Route
+            path="edit-event/add-position/:event_id"
+            element={<PrivateRoute component={PositionForm} />}
+          />
+          <Route
+            path="edit-event/edit-position/:event_id/:position_id"
+            element={<PrivateRoute component={PositionForm} />}
           />
           <Route
             path="dashboard"

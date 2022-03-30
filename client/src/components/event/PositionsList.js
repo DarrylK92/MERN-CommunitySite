@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { deletePosition } from '../../actions/event';
+import { getEvent } from '../../actions/event';
 
-const PositionsList = ({ event: { event } }) => {
+const PositionsList = ({ deletePosition, getEvent, event: { event } }) => {
+  let eventId = event._id;
+
+  useEffect(() => {
+    getEvent(eventId);
+  }, [getEvent, event]);
+
   let eventText = '';
 
   eventText = 'Event: ' + event.name;
@@ -17,22 +25,46 @@ const PositionsList = ({ event: { event } }) => {
           <td>{onePosition.name}</td>
           <td>{onePosition.requestedSkills.join(', ')}</td>
           <td>{onePosition.volunteer == '' ? 'Empty' : 'Filled'}</td>
+          <td>
+            <button className="btn btn-secondary">
+              <Link
+                to={
+                  '/edit-event/edit-position/' +
+                  event._id +
+                  '/' +
+                  onePosition._id
+                }
+              >
+                Edit
+              </Link>
+            </button>
+          </td>
+          <td>
+            <button
+              onClick={() => {
+                deletePosition(eventId, onePosition._id);
+              }}
+              className="btn btn-danger"
+            >
+              Delete
+            </button>
+          </td>
         </tr>
       </>
     ));
   }
 
   const { event_id } = useParams();
-  console.log(event_id);
 
   let goBackLink = '/edit-event/' + event_id;
+  let addPositionLink = '/edit-event/add-position/' + event_id;
 
   return (
     <section className="container">
       <h1 className="large text-primary">Edit Positions</h1>
       <p className="lead">{eventText}</p>
       <>
-        <Link to="/create-position" className="btn btn-light">
+        <Link to={addPositionLink} className="btn btn-light">
           <i className="fas fa-plus-square text-primary" /> Add Position
         </Link>
       </>
@@ -67,11 +99,15 @@ const PositionsList = ({ event: { event } }) => {
 };
 
 Event.PropTypes = {
-  event: PropTypes.object.isRequired
+  event: PropTypes.object.isRequired,
+  deletePosition: PropTypes.func.isRequired,
+  getEvent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   event: state.event
 });
 
-export default connect(mapStateToProps, null)(PositionsList);
+export default connect(mapStateToProps, { deletePosition, getEvent })(
+  PositionsList
+);

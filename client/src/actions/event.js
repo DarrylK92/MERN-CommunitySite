@@ -95,3 +95,72 @@ export const clearEvent = () => async (dispatch) => {
     type: CLEAR_EVENT
   });
 };
+
+//Create or update position
+export const createPosition =
+  (event_id, formData, navigate, edit = false) =>
+  async (dispatch) => {
+    try {
+      const res = await api.post(`/event/position/${event_id}`, formData);
+
+      dispatch({
+        type: GET_EVENT,
+        payload: res.data
+      });
+
+      dispatch(
+        setAlert(edit ? 'Position Updated' : 'Position Created', 'success')
+      );
+
+      navigate('/edit-event/edit-positions/' + formData.id);
+    } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      }
+
+      dispatch({
+        type: EVENT_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
+  };
+
+//Get position data
+export const getPosition = (event_id, position_id) => async (dispatch) => {
+  try {
+    const res = await api.get(`/event/position/${event_id}/${position_id}`);
+
+    return res;
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Delete position
+export const deletePosition = (event_id, position_id) => async (dispatch) => {
+  try {
+    const res = await api.delete(`/event/position/${event_id}/${position_id}`);
+
+    dispatch({
+      type: EVENT_DELETED
+    });
+
+    dispatch(setAlert('Position deleted'));
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
