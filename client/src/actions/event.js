@@ -164,3 +164,21 @@ export const deletePosition = (event_id, position_id) => async (dispatch) => {
     });
   }
 };
+
+//Delete volunteer
+export const deleteVolunteer = (event_id, position_id) => async (dispatch) => {
+  try {
+    const res = await api.delete(`/event/position/volunteer/${event_id}/${position_id}`);
+
+    dispatch({
+      type: EVENT_DELETED
+    });
+
+    dispatch(setAlert('Volunteer removed'));
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+}
