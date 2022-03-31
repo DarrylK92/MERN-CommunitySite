@@ -21,6 +21,14 @@ const DashboardActions = ({ user }) => {
         </Link>
       );
     }
+
+    if (user.type === 'Volunteer') {
+      extraButtonsDisplay = (
+        <Link to="/find-event" className="btn btn-light">
+          <i className="fas fa-search text-primary" /> Find Event
+        </Link>
+      );
+    }
   }
 
   return (
