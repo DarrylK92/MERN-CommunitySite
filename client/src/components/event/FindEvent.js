@@ -2,17 +2,36 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getOpenEvents } from '../../actions/event';
+const moment = require('moment');
 
-const FindEvent = ({ event: { events } }) => {
+const FindEvent = ({ getOpenEvents, event: { events } }) => {
+  useEffect(() => {
+    getOpenEvents();
+  }, [getOpenEvents]);
+
   let eventsContent;
+
+  if (events.length > 0) {
+    eventsContent = events.map((oneEvent) => (
+      <>
+        <tr key={oneEvent.id}>
+          <td>{oneEvent.user.name}</td>
+          <td>{oneEvent.name}</td>
+          <td>{moment(oneEvent.date).format('YYYY-MM-DD')}</td>
+          <td>{oneEvent.city}</td>
+          <td>{oneEvent.state}</td>
+        </tr>
+      </>
+    ));
+  }
 
   return (
     <section className="container">
       <h1 className="large text-primary">Open Events</h1>
-      <p className="lead">Events</p>
       {events.length > 0 ? (
         <>
-          <h2 className="my-2">Events</h2>
+          <h2 className="my-2">Events List</h2>
           <table className="table">
             <thead>
               <tr>
@@ -42,11 +61,12 @@ const FindEvent = ({ event: { events } }) => {
 };
 
 Event.PropTypes = {
-  event: PropTypes.object.isRequired
+  event: PropTypes.object.isRequired,
+  getOpenEvents: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   event: state.event
 });
 
-export default connect(mapStateToProps, null)(FindEvent);
+export default connect(mapStateToProps, { getOpenEvents })(FindEvent);
