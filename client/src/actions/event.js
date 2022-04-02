@@ -60,6 +60,18 @@ export const deleteEvent = (id) => async (dispatch) => {
   }
 };
 
+//Get all open events
+export const getOpenEvents = () => async (dispatch) => {
+  try {
+    const res = await api.get(`/event/all/open/`);
+
+    dispatch({
+      type: GET_EVENTS,
+      payload: res.data
+    });
+  } catch (err) {}
+};
+
 //Get all events for user
 export const getAllEvents = (id) => async (dispatch) => {
   try {
@@ -168,7 +180,9 @@ export const deletePosition = (event_id, position_id) => async (dispatch) => {
 //Delete volunteer
 export const deleteVolunteer = (event_id, position_id) => async (dispatch) => {
   try {
-    const res = await api.delete(`/event/position/volunteer/${event_id}/${position_id}`);
+    const res = await api.delete(
+      `/event/position/volunteer/${event_id}/${position_id}`
+    );
 
     dispatch({
       type: EVENT_DELETED
@@ -181,4 +195,4 @@ export const deleteVolunteer = (event_id, position_id) => async (dispatch) => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
-}
+};

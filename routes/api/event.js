@@ -9,6 +9,23 @@ const checkObjectId = require('../../middleware/checkObjectId');
 const Event = require('../../models/Event');
 const EventStatus = require('../../models/EventStatus');
 
+// @route    GET api/event/all/open
+// @desc     Get all open events
+// @access   Public
+router.get('/all/open/', async (req, res) => {
+  try {
+    const events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
+      .populate('user', ['name', 'type'])
+      .populate('eventStatus', ['status']);
+
+    res.json(events);
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route    GET api/event/:event_id
 // @desc     Get event by event ID
 // @access   Public
@@ -40,7 +57,9 @@ router.get(
   checkObjectId('user_id'),
   async ({ params: { user_id } }, res) => {
     try {
-      const events = await Event.find({ user: user_id });
+      const events = await Event.find({ user: user_id })
+        .populate('user', ['name', 'type'])
+        .populate('eventStatus', ['status']);
 
       res.json(events);
     } catch (err) {
@@ -96,7 +115,7 @@ router.post(
                 address: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                eventStats: eventStatus.id,
+                eventStatus: eventStatus.id,
                 user: user.id
               }
             },
@@ -114,7 +133,7 @@ router.post(
           address: req.body.address,
           city: req.body.city,
           state: req.body.state,
-          eventStats: eventStatus.id,
+          eventStatus: eventStatus.id,
           user: user.id
         });
 
