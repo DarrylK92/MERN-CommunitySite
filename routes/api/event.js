@@ -40,7 +40,30 @@ router.get(
   checkObjectId('user_id'),
   async ({ params: { user_id } }, res) => {
     try {
-      const events = await Event.find({ user: user_id });
+      const events = await Event.find({ user: user_id })
+        .populate('user', ['name', 'type'])
+        .populate('eventStatus', ['status']);
+
+      res.json(events);
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route    GET api/event/all/:user_id
+// @desc     Get all open events
+// @access   Public
+router.get(
+  '/all/:user_id',
+  checkObjectId('user_id'),
+  async ({ params: { user_id } }, res) => {
+    try {
+      const events = await Event.find({ user: user_id })
+        .populate('user', ['name', 'type'])
+        .populate('eventStatus', ['status']);
 
       res.json(events);
     } catch (err) {
@@ -96,7 +119,7 @@ router.post(
                 address: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                eventStats: eventStatus.id,
+                eventStatus: eventStatus.id,
                 user: user.id
               }
             },
@@ -114,7 +137,7 @@ router.post(
           address: req.body.address,
           city: req.body.city,
           state: req.body.state,
-          eventStats: eventStatus.id,
+          eventStatus: eventStatus.id,
           user: user.id
         });
 
