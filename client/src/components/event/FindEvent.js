@@ -23,6 +23,11 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
           <td>{oneEvent.state}</td>
           <td>
             <button className="btn btn-secondary">
+              <Link to={'/event/' + oneEvent.id}>Event Details</Link>
+            </button>
+          </td>
+          <td>
+            <button className="btn btn-secondary">
               <Link to={'/event/positions/' + oneEvent.id}>View Positions</Link>
             </button>
           </td>
@@ -45,6 +50,7 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
                 <th className="hide-sm">Date</th>
                 <th className="hide-sm">City</th>
                 <th className="hide-sm">State</th>
+                <th />
                 <th />
               </tr>
             </thead>
