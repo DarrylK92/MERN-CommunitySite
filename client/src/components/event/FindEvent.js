@@ -21,6 +21,11 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
           <td>{moment(oneEvent.date).format('YYYY-MM-DD')}</td>
           <td>{oneEvent.city}</td>
           <td>{oneEvent.state}</td>
+          <td>
+            <button className="btn btn-secondary">
+              <Link to={'/event/positions/' + oneEvent.id}>View Positions</Link>
+            </button>
+          </td>
         </tr>
       </>
     ));
