@@ -15,7 +15,7 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
   if (events.length > 0) {
     eventsContent = events.map((oneEvent) => (
       <>
-        <tr key={oneEvent.id}>
+        <tr key={oneEvent._id}>
           <td>{oneEvent.user.name}</td>
           <td>{oneEvent.name}</td>
           <td>{moment(oneEvent.date).format('YYYY-MM-DD')}</td>
@@ -23,12 +23,12 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
           <td>{oneEvent.state}</td>
           <td>
             <button className="btn btn-secondary">
-              <Link to={'/event/' + oneEvent.id}>Event Details</Link>
+              <Link to={'/event/' + oneEvent._id}>Event Details</Link>
             </button>
           </td>
           <td>
             <button className="btn btn-secondary">
-              <Link to={'/event/positions/' + oneEvent.id}>View Positions</Link>
+              <Link to={'/event/positions/' + oneEvent._id}>View Positions</Link>
             </button>
           </td>
         </tr>

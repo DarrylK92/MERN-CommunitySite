@@ -12,6 +12,7 @@ import PositionForm from './components/event/PositionForm';
 import Profile from './components/profile/Profile';
 import Dashboard from './components/dashboard/Dashboard';
 import FindEvent from './components/event/FindEvent';
+import PositionsListSignUp from './components/event/PositionsListSignUp';
 import Alert from './components/layout/Alert';
 import NotFound from './components/layout/NotFound';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -94,6 +95,10 @@ const App = () => {
           <Route
             path="find-event"
             element={<PrivateRoute component={FindEvent} />}
+          />
+          <Route
+            path="/event/positions/:event_id"
+            element={<PrivateRoute component={PositionsListSignUp} />}
           />
           <Route path="/*" element={<NotFound />} />
         </Routes>

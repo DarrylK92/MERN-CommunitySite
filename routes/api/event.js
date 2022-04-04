@@ -375,7 +375,7 @@ router.delete(
   }
 );
 
-// @route    PUT api/event/volunteer/:event_id
+// @route    PUT api/event/position/volunteer/:event_id/:position_id
 // @desc     Add an volunteer
 // @access   Private
 router.put(
