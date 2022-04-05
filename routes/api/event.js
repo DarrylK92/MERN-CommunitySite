@@ -391,6 +391,19 @@ router.put(
         return res.status(404).json({ msg: 'Event not found' });
       }
 
+      const alreadySignedUpForPosition = event.positions.find(
+        (position) => position.user === req.user.id
+      );
+
+      if (
+        alreadySignedUpForPosition !== undefined &&
+        alreadySignedUpForPosition !== null
+      ) {
+        return res
+          .status(404)
+          .json({ msg: 'Already signed up for position in event' });
+      }
+
       const position = event.positions.find(
         (position) => position.id === req.params.position_id
       );
