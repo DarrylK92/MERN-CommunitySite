@@ -20,8 +20,14 @@ const PositionsListSignUp = ({
   let eventText = 'Event: ';
   let positionsContent;
 
+  let alreadySignedUpForPosition;
+
   if (event !== null && event !== undefined) {
     eventText = 'Event: ' + event.name;
+
+    alreadySignedUpForPosition = event.positions.find(
+      (position) => position.volunteer === user._id
+    );
 
     if (event.positions.length > 0) {
       positionsContent = event.positions.map((onePosition) => (
@@ -37,11 +43,13 @@ const PositionsListSignUp = ({
             </td>
             <td>
               {(onePosition.volunteer === undefined ||
-                onePosition.volunteer === null) && (
+                onePosition.volunteer === null) &&
+                (alreadySignedUpForPosition === undefined ||
+                  alreadySignedUpForPosition === null) && (
                   <button
                     onClick={() => {
                       addVolunteer(event_id, onePosition._id);
-                      getEvent(event_id);
+                      window.location.reload(false);
                     }}
                     className="btn btn-danger"
                   >
@@ -54,7 +62,7 @@ const PositionsListSignUp = ({
                 <button
                   onClick={() => {
                     deleteVolunteer(event_id, onePosition._id);
-                    getEvent(event_id);
+                    window.location.reload(false);
                   }}
                   className="btn btn-danger"
                 >
