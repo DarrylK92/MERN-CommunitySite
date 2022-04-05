@@ -375,7 +375,7 @@ router.delete(
   }
 );
 
-// @route    PUT api/event/volunteer/:event_id
+// @route    PUT api/event/position/volunteer/:event_id/:position_id
 // @desc     Add an volunteer
 // @access   Private
 router.put(
@@ -389,6 +389,19 @@ router.put(
 
       if (!event) {
         return res.status(404).json({ msg: 'Event not found' });
+      }
+
+      const alreadySignedUpForPosition = event.positions.find(
+        (position) => position.user === req.user.id
+      );
+
+      if (
+        alreadySignedUpForPosition !== undefined &&
+        alreadySignedUpForPosition !== null
+      ) {
+        return res
+          .status(404)
+          .json({ msg: 'Already signed up for position in event' });
       }
 
       const position = event.positions.find(
