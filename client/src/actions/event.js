@@ -101,6 +101,25 @@ export const getEvent = (id) => async (dispatch) => {
   }
 };
 
+//Get events user is signed up for
+export const getEventsSignedUpFor = (id) => async (dispatch) => {
+  try {
+    const res = await api.get(`event/signedUpFor/${id}`);
+
+    console.log(res);
+
+    dispatch({
+      type: GET_EVENTS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
 //Clear event
 export const clearEvent = () => async (dispatch) => {
   dispatch({
