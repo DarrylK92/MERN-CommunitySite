@@ -70,6 +70,33 @@ router.get(
   }
 );
 
+// @route    GET api/event/signedUpFor/:user_id
+// @desc     Get events volunteer is signed up for
+// @access   Public
+router.get(
+  '/signedUpFor/:user_id',
+  checkObjectId('user_id'),
+  async ({ params: { user_id } }, res) => {
+    try {
+      let events = [];
+
+      for await (const doc of Event.find()) {
+        doc.positions.forEach((position) => {
+          if (JSON.stringify(position.volunteer) === '"' + user_id + '"') {
+            events.push(doc);
+          }
+        });
+      }
+
+      res.json(events);
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
 // @route    POST api/event
 // @desc     Create an event
 // @access   Private
