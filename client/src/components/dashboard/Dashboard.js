@@ -4,13 +4,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DashboardActions from './DashboardActions';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
-import { getAllEvents, clearEvent } from '../../actions/event';
+import {
+  getAllEvents,
+  clearEvent,
+  getEventsSignedUpFor
+} from '../../actions/event';
 import Event from './Event';
 
 const Dashboard = ({
   getCurrentProfile,
   deleteAccount,
   getAllEvents,
+  getEventsSignedUpFor,
   clearEvent,
   auth: { user },
   profile: { profile }
@@ -19,11 +24,15 @@ const Dashboard = ({
     getCurrentProfile();
     clearEvent();
     if (user !== null) {
-      getAllEvents(user._id);
+      if (user.type === 'Organizer') {
+        getAllEvents(user._id);
+      } else if (user.type === 'Volunteer') {
+        getEventsSignedUpFor(user._id);
+      }
     } else {
       window.location.reload(false);
     }
-  }, [getCurrentProfile, getAllEvents, clearEvent]);
+  }, [getCurrentProfile, getAllEvents, clearEvent, getEventsSignedUpFor]);
 
   return (
     <section className="container">
@@ -61,7 +70,8 @@ Dashboard.propTypes = {
   getAllEvents: PropTypes.func.isRequired,
   clearEvent: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  getEventsSignedUpFor: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -73,5 +83,6 @@ export default connect(mapStateToProps, {
   getCurrentProfile,
   deleteAccount,
   getAllEvents,
-  clearEvent
+  clearEvent,
+  getEventsSignedUpFor
 })(Dashboard);

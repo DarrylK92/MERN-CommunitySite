@@ -6,32 +6,59 @@ import formatDate from '../../utils/formatDate';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 
-const Event = ({ createEvent, deleteEvent, event: { events } }) => {
+const Event = ({
+  createEvent,
+  deleteEvent,
+  event: { events },
+  auth: { user }
+}) => {
   let eventsContent;
 
-  if (events !== null && events !== undefined) {
-    eventsContent = events.map((oneEvent) => (
-      <>
-        <tr key={oneEvent._id}>
-          <td>{oneEvent.name}</td>
-          <td className="hide-sm">{oneEvent.description}</td>
-          <td>{formatDate(oneEvent.date)}</td>
-          <td>
-            <button className="btn btn-secondary">
-              <Link to={'/edit-event/' + oneEvent._id}>Edit</Link>
-            </button>
-          </td>
-          <td>
-            <button
-              onClick={() => deleteEvent(oneEvent._id)}
-              className="btn btn-danger"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      </>
-    ));
+  if (user !== null && user !== undefined) {
+    if (events !== null && events !== undefined) {
+      eventsContent = events.map((oneEvent) => (
+        <>
+          <tr key={oneEvent._id}>
+            <td>{oneEvent.name}</td>
+            <td className="hide-sm">{oneEvent.description}</td>
+            <td>{formatDate(oneEvent.date)}</td>
+            {user.type === 'Organizer' && (
+              <>
+                <td>
+                  <button className="btn btn-secondary">
+                    <Link to={'/edit-event/' + oneEvent._id}>Edit</Link>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => deleteEvent(oneEvent._id)}
+                    className="btn btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </>
+            )}
+            {user.type === 'Volunteer' && (
+              <>
+                <td>
+                  <button className="btn btn-secondary">
+                    <Link to={'/event/' + oneEvent._id}>Event Details</Link>
+                  </button>
+                </td>
+                <td>
+                  <button className="btn btn-secondary">
+                    <Link to={'/event/positions/' + oneEvent._id}>
+                      View Positions
+                    </Link>
+                  </button>
+                </td>
+              </>
+            )}
+          </tr>
+        </>
+      ));
+    }
   }
 
   return (
@@ -62,11 +89,13 @@ const Event = ({ createEvent, deleteEvent, event: { events } }) => {
 Event.propTypes = {
   createEvent: PropTypes.func.isRequired,
   deleteEvent: PropTypes.func.isRequired,
-  event: PropTypes.object.isRequired
+  event: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  event: state.event
+  event: state.event,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {
