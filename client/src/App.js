@@ -12,6 +12,7 @@ import PositionForm from './components/event/PositionForm';
 import Profile from './components/profile/Profile';
 import Dashboard from './components/dashboard/Dashboard';
 import FindEvent from './components/event/FindEvent';
+import EventDetails from './components/event/EventDetails';
 import PositionsListSignUp from './components/event/PositionsListSignUp';
 import Alert from './components/layout/Alert';
 import NotFound from './components/layout/NotFound';
@@ -75,6 +76,10 @@ const App = () => {
           <Route
             path="edit-event/:id"
             element={<PrivateRoute component={EventForm} />}
+          />
+          <Route
+            path="event/:id"
+            element={<PrivateRoute component={EventDetails} />}
           />
           <Route
             path="edit-event/edit-positions/:event_id"

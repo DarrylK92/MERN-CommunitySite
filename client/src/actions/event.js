@@ -106,8 +106,6 @@ export const getEventsSignedUpFor = (id) => async (dispatch) => {
   try {
     const res = await api.get(`event/signedUpFor/${id}`);
 
-    console.log(res);
-
     dispatch({
       type: GET_EVENTS,
       payload: res.data

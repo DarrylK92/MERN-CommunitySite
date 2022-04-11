@@ -580,3 +580,7 @@ button {
   right: 2rem;
   display: inline-block;
 }
+
+.details-display {
+  margin-left: 10px;
+}
