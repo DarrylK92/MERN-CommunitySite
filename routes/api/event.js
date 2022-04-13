@@ -349,6 +349,9 @@ router.post(
 
         event.positions.push(newPosition);
 
+        const eventStatus = await EventStatus.findOne({ status: 'Open' });
+        event.eventStatus = eventStatus._id;
+
         await event.save();
       }
 
