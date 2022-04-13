@@ -142,7 +142,7 @@ router.post(
                 address: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                eventStatus: eventStatus.id,
+                eventStatus: eventStatus._id,
                 user: user.id
               }
             },
@@ -160,7 +160,7 @@ router.post(
           address: req.body.address,
           city: req.body.city,
           state: req.body.state,
-          eventStatus: eventStatus.id,
+          eventStatus: eventStatus._id,
           user: user.id
         });
 
@@ -403,7 +403,7 @@ router.delete(
 );
 
 // @route    PUT api/event/position/volunteer/:event_id/:position_id
-// @desc     Add an volunteer
+// @desc     Add a volunteer
 // @access   Private
 router.put(
   '/position/volunteer/:event_id/:position_id',
@@ -448,6 +448,16 @@ router.put(
       }
 
       position.volunteer = req.user.id;
+
+      const openPosition = event.positions.find(
+        (position) =>
+          position.volunteer === null || position.volunteer === undefined
+      );
+
+      if (openPosition === null || openPosition === undefined) {
+        const eventStatus = await EventStatus.findOne({ status: 'Full' });
+        event.eventStatus = eventStatus._id;
+      }
 
       await event.save();
 
@@ -497,8 +507,7 @@ router.delete(
 
       position.volunteer = null;
 
-      const eventStatus = await EventStatus.find({ status: 'Open' })
-
+      const eventStatus = await EventStatus.findOne({ status: 'Open' });
       event.eventStatus = eventStatus._id;
 
       await event.save();
