@@ -392,6 +392,16 @@ router.delete(
         ({ id }) => id !== req.params.position_id
       );
 
+      const openPosition = event.positions.find(
+        (position) =>
+          position.volunteer === null || position.volunteer === undefined
+      );
+
+      if (openPosition === null || openPosition === undefined) {
+        const eventStatus = await EventStatus.findOne({ status: 'Full' });
+        event.eventStatus = eventStatus._id;
+      }
+
       await event.save();
 
       return res.json(event.positions);
