@@ -497,6 +497,10 @@ router.delete(
 
       position.volunteer = null;
 
+      const eventStatus = await EventStatus.find({ status: 'Open' })
+
+      event.eventStatus = eventStatus._id;
+
       await event.save();
 
       return res.json(event.positions);
