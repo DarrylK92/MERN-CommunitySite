@@ -14,7 +14,24 @@ const EventStatus = require('../../models/EventStatus');
 // @access   Public
 router.get('/all/open/', async (req, res) => {
   try {
-    const events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
+    let events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
+      .populate('user', ['name', 'type'])
+      .populate('eventStatus', ['status']);
+
+    const eventStatus = await EventStatus.findOne({ status: 'Completed' });
+
+    var today = new Date();
+
+    toUpdateEvents = events.filter(function (obj) {
+      return obj.eventStatus !== eventStatus._id && obj.date < today;
+    });
+
+    toUpdateEvents.forEach((event) => {
+      event.eventStatus = eventStatus._id;
+      event.save();
+    });
+
+    events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
       .populate('user', ['name', 'type'])
       .populate('eventStatus', ['status']);
 
@@ -57,7 +74,24 @@ router.get(
   checkObjectId('user_id'),
   async ({ params: { user_id } }, res) => {
     try {
-      const events = await Event.find({ user: user_id })
+      let events = await Event.find({ user: user_id })
+        .populate('user', ['name', 'type'])
+        .populate('eventStatus', ['status']);
+
+      const eventStatus = await EventStatus.findOne({ status: 'Completed' });
+
+      var today = new Date();
+
+      toUpdateEvents = events.filter(function (obj) {
+        return obj.eventStatus !== eventStatus._id && obj.date < today;
+      });
+
+      toUpdateEvents.forEach((event) => {
+        event.eventStatus = eventStatus._id;
+        event.save();
+      });
+
+      events = await Event.find({ user: user_id })
         .populate('user', ['name', 'type'])
         .populate('eventStatus', ['status']);
 
