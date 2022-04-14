@@ -14,7 +14,24 @@ const EventStatus = require('../../models/EventStatus');
 // @access   Public
 router.get('/all/open/', async (req, res) => {
   try {
-    const events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
+    let events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
+      .populate('user', ['name', 'type'])
+      .populate('eventStatus', ['status']);
+
+    const eventStatus = await EventStatus.findOne({ status: 'Completed' });
+
+    var today = new Date();
+
+    toUpdateEvents = events.filter(function (obj) {
+      return obj.eventStatus !== eventStatus._id && obj.date < today;
+    });
+
+    toUpdateEvents.forEach((event) => {
+      event.eventStatus = eventStatus._id;
+      event.save();
+    });
+
+    events = await Event.find({ eventStatus: '621c1a84b3fe8a674b63aa4d' })
       .populate('user', ['name', 'type'])
       .populate('eventStatus', ['status']);
 
@@ -57,7 +74,24 @@ router.get(
   checkObjectId('user_id'),
   async ({ params: { user_id } }, res) => {
     try {
-      const events = await Event.find({ user: user_id })
+      let events = await Event.find({ user: user_id })
+        .populate('user', ['name', 'type'])
+        .populate('eventStatus', ['status']);
+
+      const eventStatus = await EventStatus.findOne({ status: 'Completed' });
+
+      var today = new Date();
+
+      toUpdateEvents = events.filter(function (obj) {
+        return obj.eventStatus !== eventStatus._id && obj.date < today;
+      });
+
+      toUpdateEvents.forEach((event) => {
+        event.eventStatus = eventStatus._id;
+        event.save();
+      });
+
+      events = await Event.find({ user: user_id })
         .populate('user', ['name', 'type'])
         .populate('eventStatus', ['status']);
 
@@ -142,7 +176,7 @@ router.post(
                 address: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                eventStatus: eventStatus.id,
+                eventStatus: eventStatus._id,
                 user: user.id
               }
             },
@@ -160,7 +194,7 @@ router.post(
           address: req.body.address,
           city: req.body.city,
           state: req.body.state,
-          eventStatus: eventStatus.id,
+          eventStatus: eventStatus._id,
           user: user.id
         });
 
@@ -349,6 +383,9 @@ router.post(
 
         event.positions.push(newPosition);
 
+        const eventStatus = await EventStatus.findOne({ status: 'Open' });
+        event.eventStatus = eventStatus._id;
+
         await event.save();
       }
 
@@ -392,6 +429,16 @@ router.delete(
         ({ id }) => id !== req.params.position_id
       );
 
+      const openPosition = event.positions.find(
+        (position) =>
+          position.volunteer === null || position.volunteer === undefined
+      );
+
+      if (openPosition === null || openPosition === undefined) {
+        const eventStatus = await EventStatus.findOne({ status: 'Full' });
+        event.eventStatus = eventStatus._id;
+      }
+
       await event.save();
 
       return res.json(event.positions);
@@ -403,7 +450,7 @@ router.delete(
 );
 
 // @route    PUT api/event/position/volunteer/:event_id/:position_id
-// @desc     Add an volunteer
+// @desc     Add a volunteer
 // @access   Private
 router.put(
   '/position/volunteer/:event_id/:position_id',
@@ -448,6 +495,16 @@ router.put(
       }
 
       position.volunteer = req.user.id;
+
+      const openPosition = event.positions.find(
+        (position) =>
+          position.volunteer === null || position.volunteer === undefined
+      );
+
+      if (openPosition === null || openPosition === undefined) {
+        const eventStatus = await EventStatus.findOne({ status: 'Full' });
+        event.eventStatus = eventStatus._id;
+      }
 
       await event.save();
 
@@ -496,6 +553,9 @@ router.delete(
       }
 
       position.volunteer = null;
+
+      const eventStatus = await EventStatus.findOne({ status: 'Open' });
+      event.eventStatus = eventStatus._id;
 
       await event.save();
 
