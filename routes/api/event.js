@@ -114,7 +114,9 @@ router.get(
     try {
       let events = [];
 
-      for await (const doc of Event.find()) {
+      for await (const doc of Event.find().populate('eventStatus', [
+        'status'
+      ])) {
         doc.positions.forEach((position) => {
           if (JSON.stringify(position.volunteer) === '"' + user_id + '"') {
             events.push(doc);
@@ -137,7 +139,9 @@ router.get(
 
       events = [];
 
-      for await (const doc of Event.find()) {
+      for await (const doc of Event.find().populate('eventStatus', [
+        'status'
+      ])) {
         doc.positions.forEach((position) => {
           if (JSON.stringify(position.volunteer) === '"' + user_id + '"') {
             events.push(doc);
