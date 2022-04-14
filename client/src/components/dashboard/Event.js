@@ -22,6 +22,7 @@ const Event = ({
             <td>{oneEvent.name}</td>
             <td className="hide-sm">{oneEvent.description}</td>
             <td>{formatDate(oneEvent.date)}</td>
+            <td>{oneEvent.eventStatus.status}</td>
             {user.type === 'Organizer' && (
               <>
                 <td>
@@ -74,6 +75,7 @@ const Event = ({
                 <th>Name</th>
                 <th className="hide-sm">Description</th>
                 <th className="hide-sm">Date</th>
+                <th className="hide-sm">Status</th>
                 <th />
                 <th />
               </tr>
