@@ -122,6 +122,29 @@ router.get(
         });
       }
 
+      const eventStatus = await EventStatus.findOne({ status: 'Completed' });
+
+      var today = new Date();
+
+      toUpdateEvents = events.filter(function (obj) {
+        return obj.eventStatus !== eventStatus._id && obj.date < today;
+      });
+
+      toUpdateEvents.forEach((event) => {
+        event.eventStatus = eventStatus._id;
+        event.save();
+      });
+
+      events = [];
+
+      for await (const doc of Event.find()) {
+        doc.positions.forEach((position) => {
+          if (JSON.stringify(position.volunteer) === '"' + user_id + '"') {
+            events.push(doc);
+          }
+        });
+      }
+
       res.json(events);
     } catch (err) {
       console.error(err.message);
