@@ -32,7 +32,10 @@ const Event = ({
                 </td>
                 <td>
                   <button
-                    onClick={() => deleteEvent(oneEvent._id)}
+                    onClick={() => {
+                      deleteEvent(oneEvent._id);
+                      window.location.reload(false);
+                    }}
                     className="btn btn-danger"
                   >
                     Delete
