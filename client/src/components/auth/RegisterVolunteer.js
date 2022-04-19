@@ -47,6 +47,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             value={name}
             onChange={onChange}
           />
+          {name !== '' && <small className="form-text">Name</small>}
         </div>
         <div className="form-group">
           <input
@@ -56,6 +57,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             value={email}
             onChange={onChange}
           />
+          {email !== '' && <small className="form-text">Email Address</small>}
         </div>
         <div className="form-group">
           <input
@@ -65,6 +67,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             value={password}
             onChange={onChange}
           />
+          {password !== '' && <small className="form-text">Password</small>}
         </div>
         <div className="form-group">
           <input
@@ -74,6 +77,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             value={password2}
             onChange={onChange}
           />
+          {password2 !== '' && (
+            <small className="form-text">Confirm Password</small>
+          )}
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
       </form>
