@@ -42,8 +42,9 @@ const PositionsListSignUp = ({
                 : 'Filled'}
             </td>
             <td>
-              {(onePosition.volunteer === undefined ||
-                onePosition.volunteer === null) &&
+              {event.eventStatus.status !== 'Completed' &&
+                (onePosition.volunteer === undefined ||
+                  onePosition.volunteer === null) &&
                 (alreadySignedUpForPosition === undefined ||
                   alreadySignedUpForPosition === null) && (
                   <button
@@ -58,17 +59,18 @@ const PositionsListSignUp = ({
                 )}
             </td>
             <td>
-              {onePosition.volunteer === user._id && (
-                <button
-                  onClick={() => {
-                    deleteVolunteer(event_id, onePosition._id);
-                    window.location.reload(false);
-                  }}
-                  className="btn btn-danger"
-                >
-                  Cancel Sign Up
-                </button>
-              )}
+              {event.eventStatus.status !== 'Completed' &&
+                onePosition.volunteer === user._id && (
+                  <button
+                    onClick={() => {
+                      deleteVolunteer(event_id, onePosition._id);
+                      window.location.reload(false);
+                    }}
+                    className="btn btn-danger"
+                  >
+                    Cancel Sign Up
+                  </button>
+                )}
             </td>
           </tr>
         </>
