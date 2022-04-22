@@ -36,6 +36,9 @@ const DashboardActions = ({ user }) => {
       <Link to="/edit-profile" className="btn btn-light" state={{ backUrl: '/dashboard' }}>
         <i className="fas fa-user-circle text-primary" /> Edit Profile
       </Link>
+      <Link to="/profile/me" className="btn btn-light" state={{ backUrl: '/dashboard' }}>
+        <i className="fas fa-user-circle text-primary" /> View Profile
+      </Link>
       {extraButtonsDisplay}
     </div>
   );
