@@ -19,7 +19,11 @@ const EventDetails = ({ getEvent, event: { event, loading } }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
   const location = useLocation();
-  const backUrl = location.state.backUrl;
+  let backUrl = '/find-event';
+
+  if (location.state !== null) {
+    backUrl = location.state.backUrl;
+  }
 
   const { id } = useParams();
   useEffect(() => {

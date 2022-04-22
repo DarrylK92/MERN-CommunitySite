@@ -13,7 +13,11 @@ const PositionsListSignUp = ({
 }) => {
   let { event_id } = useParams();
   const location = useLocation();
-  const backUrl = location.state.backUrl;
+  let backUrl = '/find-event';
+
+  if (location.state !== null) {
+    backUrl = location.state.backUrl;
+  }
 
   useEffect(() => {
     getEvent(event_id);
