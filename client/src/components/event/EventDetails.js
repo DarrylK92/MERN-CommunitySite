@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getEvent } from '../../actions/event';
@@ -18,6 +18,8 @@ let initialState = {
 const EventDetails = ({ getEvent, event: { event, loading } }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
+  const location = useLocation();
+  const backUrl = location.state.backUrl;
 
   const { id } = useParams();
   useEffect(() => {
@@ -63,7 +65,7 @@ const EventDetails = ({ getEvent, event: { event, loading } }) => {
       <p className="details-display">{city}</p>
       <h2>State</h2>
       <p className="details-display">{state}</p>
-      <Link className="btn btn-light my-1" to="/find-event">
+      <Link className="btn btn-light my-1" to={backUrl}>
         Go Back
       </Link>
     </section>

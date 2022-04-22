@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getEvent, deleteVolunteer, addVolunteer } from '../../actions/event';
@@ -12,6 +12,8 @@ const PositionsListSignUp = ({
   auth: { user }
 }) => {
   let { event_id } = useParams();
+  const location = useLocation();
+  const backUrl = location.state.backUrl;
 
   useEffect(() => {
     getEvent(event_id);
@@ -78,8 +80,6 @@ const PositionsListSignUp = ({
     }
   }
 
-  let goBackLink = '/find-event';
-
   return (
     <section className="container">
       <h1 className="large text-primary">View Positions</h1>
@@ -106,7 +106,7 @@ const PositionsListSignUp = ({
         </div>
       )}
       <div className="my-2">
-        <Link className="btn btn-light my-1" to={goBackLink}>
+        <Link className="btn btn-light my-1" to={backUrl}>
           Go Back
         </Link>
       </div>

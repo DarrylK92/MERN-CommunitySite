@@ -12,6 +12,8 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
 
   let eventsContent;
 
+  const backUrl = '/find-event';
+
   if (events.length > 0) {
     eventsContent = events.map((oneEvent) => (
       <>
@@ -23,12 +25,16 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
           <td>{oneEvent.state}</td>
           <td>
             <button className="btn btn-secondary">
-              <Link to={'/event/' + oneEvent._id}>Event Details</Link>
+              <Link to={'/event/' + oneEvent._id} state={{ backUrl: backUrl }}>
+                Event Details
+              </Link>
             </button>
           </td>
           <td>
             <button className="btn btn-secondary">
-              <Link to={'/event/positions/' + oneEvent._id}>View Positions</Link>
+              <Link to={'/event/positions/' + oneEvent._id} state={{ backUrl: backUrl }}>
+                View Positions
+              </Link>
             </button>
           </td>
         </tr>

@@ -47,12 +47,17 @@ const Event = ({
               <>
                 <td>
                   <button className="btn btn-secondary">
-                    <Link to={'/event/' + oneEvent._id}>Event Details</Link>
+                    <Link
+                      to={'/event/' + oneEvent._id}
+                      state={{ backUrl: '/dashboard' }}
+                    >
+                      Event Details
+                    </Link>
                   </button>
                 </td>
                 <td>
                   <button className="btn btn-secondary">
-                    <Link to={'/event/positions/' + oneEvent._id}>
+                    <Link to={'/event/positions/' + oneEvent._id} state={{ backUrl: '/dashboard' }}>
                       View Positions
                     </Link>
                   </button>
