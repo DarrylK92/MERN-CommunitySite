@@ -37,7 +37,8 @@ function eventReducer(state = initialState, action) {
     case CLEAR_EVENT:
       return {
         ...state,
-        event: null
+        event: null,
+        loading: true
       };
     default:
       return state;

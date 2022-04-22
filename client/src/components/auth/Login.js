@@ -40,6 +40,7 @@ const Login = ({ login, isAuthenticated }) => {
             onChange={onChange}
             required
           />
+          { email !== '' && <small className="form-text">Email Address</small> }
         </div>
         <div className="form-group">
           <input
@@ -50,11 +51,12 @@ const Login = ({ login, isAuthenticated }) => {
             onChange={onChange}
             minLength="6"
           />
+          { password !== '' && <small className="form-text">Password</small> }
         </div>
         <input type="submit" className="btn btn-primary" value="Login" />
       </form>
       <p className="my-1">
-        Don't have an account? <Link to="/register">Sign Up</Link>
+        Don't have an account? <Link to="/register-volunteer">Sign Up</Link>
       </p>
     </section>
   );

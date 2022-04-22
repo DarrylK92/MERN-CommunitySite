@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import ProfileTop from './ProfileTop';
@@ -14,6 +14,13 @@ const Profile = ({
   profile: { profile },
   auth
 }) => {
+  const location = useLocation();
+  let backUrl = '/dashboard';
+
+  if (location.state !== null) {
+    backUrl = location.state.backUrl;
+  }
+
   const { id } = useParams();
   useEffect(() => {
     if (localStorage.token) {
@@ -39,8 +46,8 @@ const Profile = ({
         <Spinner />
       ) : (
         <Fragment>
-          <Link to="/profiles" className="btn btn-light">
-            {backButtonText}
+          <Link to={backUrl} className="btn btn-light">
+            Go Back
           </Link>
           {auth.isAuthenticated &&
             auth.loading === false &&

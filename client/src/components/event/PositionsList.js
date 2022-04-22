@@ -28,44 +28,61 @@ const PositionsList = ({
         <tr key={onePosition.id}>
           <td>{onePosition.name}</td>
           <td>{onePosition.requestedSkills.join(', ')}</td>
-          <td>{onePosition.volunteer == undefined || onePosition.volunteer == null ? 'Empty' : 'Filled'}</td>
           <td>
-            <button className="btn btn-secondary">
+            {onePosition.volunteer == undefined ||
+            onePosition.volunteer == null ? (
+              'Empty'
+            ) : (
               <Link
-                to={
-                  '/edit-event/edit-position/' +
-                  event._id +
-                  '/' +
-                  onePosition._id
-                }
+                to={'/profile/' + onePosition.volunteer._id}
+                state={{ backUrl: '/edit-event/edit-positions/' + event._id }}
               >
-                Edit
+                {onePosition.volunteer.name}
               </Link>
-            </button>
+            )}
           </td>
           <td>
-            <button
-              onClick={() => {
-                deletePosition(eventId, onePosition._id);
-                getEvent(eventId);
-              }}
-              className="btn btn-danger"
-            >
-              Delete
-            </button>
+            {event.eventStatus.status !== 'Completed' && (
+              <button className="btn btn-secondary">
+                <Link
+                  to={
+                    '/edit-event/edit-position/' +
+                    event._id +
+                    '/' +
+                    onePosition._id
+                  }
+                >
+                  Edit
+                </Link>
+              </button>
+            )}
           </td>
           <td>
-            {onePosition.volunteer !== undefined && onePosition.volunteer !== null && (
+            {event.eventStatus.status !== 'Completed' && (
               <button
                 onClick={() => {
-                  deleteVolunteer(eventId, onePosition._id);
+                  deletePosition(eventId, onePosition._id);
                   getEvent(eventId);
                 }}
                 className="btn btn-danger"
               >
-                Remove volunteer
+                Delete
               </button>
             )}
+          </td>
+          <td>
+            {onePosition.volunteer !== undefined &&
+              onePosition.volunteer !== null && (
+                <button
+                  onClick={() => {
+                    deleteVolunteer(eventId, onePosition._id);
+                    getEvent(eventId);
+                  }}
+                  className="btn btn-danger"
+                >
+                  Remove volunteer
+                </button>
+              )}
           </td>
         </tr>
       </>
@@ -81,11 +98,13 @@ const PositionsList = ({
     <section className="container">
       <h1 className="large text-primary">Edit Positions</h1>
       <p className="lead">{eventText}</p>
-      <>
-        <Link to={addPositionLink} className="btn btn-light">
-          <i className="fas fa-plus-square text-primary" /> Add Position
-        </Link>
-      </>
+      {event.eventStatus.status !== 'Completed' && (
+        <>
+          <Link to={addPositionLink} className="btn btn-light">
+            <i className="fas fa-plus-square text-primary" /> Add Position
+          </Link>
+        </>
+      )}
       {event.positions.length > 0 ? (
         <>
           <h2 className="my-2">Your Positions</h2>
@@ -105,7 +124,9 @@ const PositionsList = ({
         </>
       ) : (
         <div>
-          <p>You have not created any positions yet!</p>
+          {event.eventStatus.status !== 'Completed' && (
+            <p>You have not created any positions yet!</p>
+          )}
         </div>
       )}
       <div className="my-2">

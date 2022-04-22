@@ -9,6 +9,7 @@ import {
   clearEvent,
   getEventsSignedUpFor
 } from '../../actions/event';
+import Spinner from '../layout/Spinner';
 import Event from './Event';
 
 const Dashboard = ({
@@ -18,7 +19,8 @@ const Dashboard = ({
   getEventsSignedUpFor,
   clearEvent,
   auth: { user },
-  profile: { profile }
+  profile: { profile },
+  event: { loading }
 }) => {
   useEffect(() => {
     getCurrentProfile();
@@ -40,7 +42,8 @@ const Dashboard = ({
       <p className="lead">
         <i className="fas fa-user" /> Welcome {user && user.name}
       </p>
-      {profile !== null ? (
+      {loading === true && <Spinner />}
+      {profile !== null && loading === false ? (
         <>
           <DashboardActions />
 
@@ -76,7 +79,8 @@ Dashboard.propTypes = {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  profile: state.profile
+  profile: state.profile,
+  event: state.event
 });
 
 export default connect(mapStateToProps, {

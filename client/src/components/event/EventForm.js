@@ -87,6 +87,7 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
             onChange={onChange}
             required
           />
+          { name !== '' && <small className="form-text">* Email Address</small> }
           <div className="form-group">
             <h4>Event Date</h4>
             <input type="date" name="date" value={date} onChange={onChange} />
@@ -100,6 +101,7 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
               value={description}
               onChange={onChange}
             />
+            { description !== '' && <small className="form-text">Event Description</small> }
           </div>
           <div className="form-group">
             <input
@@ -110,6 +112,7 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
               onChange={onChange}
               required
             />
+            { address !== '' && <small className="form-text">* Event Address</small> }
           </div>
           <div className="form-group">
             <input
@@ -120,6 +123,7 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
               onChange={onChange}
               required
             />
+            { city !== '' && <small className="form-text">* City</small> }
           </div>
           <div className="form-group">
             <select name="state" value={state} onChange={onChange}>
@@ -175,7 +179,7 @@ const AddEvent = ({ createEvent, getEvent, event: { event, loading } }) => {
               <option value="WI">WI</option>
               <option value="WY">WY</option>
             </select>
-            <small className="form-text">Event State</small>
+            <small className="form-text">* Event State</small>
           </div>
         </div>
         {editPositionsDiv}

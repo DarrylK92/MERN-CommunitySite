@@ -2,15 +2,19 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getOpenEvents } from '../../actions/event';
+import { getOpenEvents, clearEvent } from '../../actions/event';
+import Spinner from '../layout/Spinner';
 const moment = require('moment');
 
-const FindEvent = ({ getOpenEvents, event: { events } }) => {
+const FindEvent = ({ getOpenEvents, clearEvent, event: { events, loading } }) => {
   useEffect(() => {
+    clearEvent();
     getOpenEvents();
-  }, [getOpenEvents]);
+  }, [getOpenEvents, clearEvent]);
 
   let eventsContent;
+
+  const backUrl = '/find-event';
 
   if (events.length > 0) {
     eventsContent = events.map((oneEvent) => (
@@ -23,12 +27,16 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
           <td>{oneEvent.state}</td>
           <td>
             <button className="btn btn-secondary">
-              <Link to={'/event/' + oneEvent._id}>Event Details</Link>
+              <Link to={'/event/' + oneEvent._id} state={{ backUrl: backUrl }}>
+                Event Details
+              </Link>
             </button>
           </td>
           <td>
             <button className="btn btn-secondary">
-              <Link to={'/event/positions/' + oneEvent._id}>View Positions</Link>
+              <Link to={'/event/positions/' + oneEvent._id} state={{ backUrl: backUrl }}>
+                View Positions
+              </Link>
             </button>
           </td>
         </tr>
@@ -39,7 +47,8 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
   return (
     <section className="container">
       <h1 className="large text-primary">Open Events</h1>
-      {events.length > 0 ? (
+      {loading === true && <Spinner />}
+      {events.length > 0 && loading === false ? (
         <>
           <h2 className="my-2">Events List</h2>
           <table className="table">
@@ -73,11 +82,12 @@ const FindEvent = ({ getOpenEvents, event: { events } }) => {
 
 Event.PropTypes = {
   event: PropTypes.object.isRequired,
-  getOpenEvents: PropTypes.func.isRequired
+  getOpenEvents: PropTypes.func.isRequired,
+  clearEvent: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   event: state.event
 });
 
-export default connect(mapStateToProps, { getOpenEvents })(FindEvent);
+export default connect(mapStateToProps, { getOpenEvents, clearEvent })(FindEvent);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getEvent, deleteVolunteer, addVolunteer } from '../../actions/event';
@@ -12,6 +12,12 @@ const PositionsListSignUp = ({
   auth: { user }
 }) => {
   let { event_id } = useParams();
+  const location = useLocation();
+  let backUrl = '/find-event';
+
+  if (location.state !== null) {
+    backUrl = location.state.backUrl;
+  }
 
   useEffect(() => {
     getEvent(event_id);
@@ -37,13 +43,21 @@ const PositionsListSignUp = ({
             <td>{onePosition.requestedSkills.join(', ')}</td>
             <td>
               {onePosition.volunteer == undefined ||
-              onePosition.volunteer == null
-                ? 'Empty'
-                : 'Filled'}
+              onePosition.volunteer == null ? (
+                'Empty'
+              ) : (
+                <Link
+                  to={'/profile/' + onePosition.volunteer._id}
+                  state={{ backUrl: '/event/positions/' + event._id }}
+                >
+                  {onePosition.volunteer.name}
+                </Link>
+              )}
             </td>
             <td>
-              {(onePosition.volunteer === undefined ||
-                onePosition.volunteer === null) &&
+              {event.eventStatus.status !== 'Completed' &&
+                (onePosition.volunteer === undefined ||
+                  onePosition.volunteer === null) &&
                 (alreadySignedUpForPosition === undefined ||
                   alreadySignedUpForPosition === null) && (
                   <button
@@ -58,25 +72,24 @@ const PositionsListSignUp = ({
                 )}
             </td>
             <td>
-              {onePosition.volunteer === user._id && (
-                <button
-                  onClick={() => {
-                    deleteVolunteer(event_id, onePosition._id);
-                    window.location.reload(false);
-                  }}
-                  className="btn btn-danger"
-                >
-                  Cancel Sign Up
-                </button>
-              )}
+              {event.eventStatus.status !== 'Completed' &&
+                onePosition.volunteer === user._id && (
+                  <button
+                    onClick={() => {
+                      deleteVolunteer(event_id, onePosition._id);
+                      window.location.reload(false);
+                    }}
+                    className="btn btn-danger"
+                  >
+                    Cancel Sign Up
+                  </button>
+                )}
             </td>
           </tr>
         </>
       ));
     }
   }
-
-  let goBackLink = '/find-event';
 
   return (
     <section className="container">
@@ -104,7 +117,7 @@ const PositionsListSignUp = ({
         </div>
       )}
       <div className="my-2">
-        <Link className="btn btn-light my-1" to={goBackLink}>
+        <Link className="btn btn-light my-1" to={backUrl}>
           Go Back
         </Link>
       </div>

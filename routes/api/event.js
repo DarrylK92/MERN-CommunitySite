@@ -51,7 +51,15 @@ router.get(
   checkObjectId('event_id'),
   async ({ params: { event_id } }, res) => {
     try {
-      const event = await Event.findById(event_id);
+      const event = await Event.findById(event_id)
+        .populate('eventStatus', ['status'])
+        .populate({
+          path: 'positions',
+          populate: {
+            path: 'volunteer',
+            model: 'user'
+          }
+        });
 
       if (!event) {
         return res.status(404).json({ msg: 'Event not found' });

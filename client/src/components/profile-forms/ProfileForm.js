@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link, useMatch, useNavigate } from 'react-router-dom';
+import { Link, useMatch, useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
@@ -23,6 +23,8 @@ const ProfileForm = ({
   user
 }) => {
   const [formData, setFormData] = useState(initialState);
+  const location = useLocation();
+  const backUrl = location.state.backUrl;
 
   const creatingProfile = useMatch('/create-profile');
 
@@ -180,7 +182,7 @@ const ProfileForm = ({
         </div>
 
         <input type="submit" className="btn btn-primary my-1" />
-        <Link className="btn btn-light my-1" to="/profile/me">
+        <Link className="btn btn-light my-1" to={backUrl}>
           Go Back
         </Link>
       </form>
