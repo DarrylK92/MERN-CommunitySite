@@ -45,7 +45,7 @@ const PositionsListSignUp = ({
               {onePosition.volunteer == undefined ||
               onePosition.volunteer == null
                 ? 'Empty'
-                : 'Filled'}
+                : onePosition.volunteer.name}
             </td>
             <td>
               {event.eventStatus.status !== 'Completed' &&
