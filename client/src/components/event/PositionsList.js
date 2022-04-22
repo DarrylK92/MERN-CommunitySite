@@ -29,9 +29,17 @@ const PositionsList = ({
           <td>{onePosition.name}</td>
           <td>{onePosition.requestedSkills.join(', ')}</td>
           <td>
-            {onePosition.volunteer == undefined || onePosition.volunteer == null
-              ? 'Empty'
-              : onePosition.volunteer.name}
+            {onePosition.volunteer == undefined ||
+            onePosition.volunteer == null ? (
+              'Empty'
+            ) : (
+              <Link
+                to={'/profile/' + onePosition.volunteer._id}
+                state={{ backUrl: '/edit-event/edit-positions/' + event._id }}
+              >
+                {onePosition.volunteer.name}
+              </Link>
+            )}
           </td>
           <td>
             {event.eventStatus.status !== 'Completed' && (
