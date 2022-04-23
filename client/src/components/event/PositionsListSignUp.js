@@ -31,9 +31,22 @@ const PositionsListSignUp = ({
   if (event !== null && event !== undefined) {
     eventText = 'Event: ' + event.name;
 
-    alreadySignedUpForPosition = event.positions.find(
-      (position) => position.volunteer === user._id
+    alreadySignedUpForPosition = event.positions.filter(
+      (position) =>
+        position.volunteer !== undefined && position.volunteer !== null
     );
+
+    if (alreadySignedUpForPosition.length > 0) {
+      alreadySignedUpForPosition = alreadySignedUpForPosition.find(
+        (position) => position.volunteer._id === user._id
+      );
+    }
+
+    if (alreadySignedUpForPosition !== undefined) {
+      if (alreadySignedUpForPosition.length === 0) {
+        alreadySignedUpForPosition = undefined;
+      }
+    }
 
     if (event.positions.length > 0) {
       positionsContent = event.positions.map((onePosition) => (
@@ -73,7 +86,9 @@ const PositionsListSignUp = ({
             </td>
             <td>
               {event.eventStatus.status !== 'Completed' &&
-                onePosition.volunteer === user._id && (
+                onePosition.volunteer !== undefined &&
+                onePosition.volunteer !== null &&
+                onePosition.volunteer._id === user._id && (
                   <button
                     onClick={() => {
                       deleteVolunteer(event_id, onePosition._id);
