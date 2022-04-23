@@ -24,7 +24,11 @@ const ProfileForm = ({
 }) => {
   const [formData, setFormData] = useState(initialState);
   const location = useLocation();
-  const backUrl = location.state.backUrl;
+  let backUrl = '/dashboard';
+
+  if (location.state !== null) {
+    backUrl = location.state.backUrl;
+  }
 
   const creatingProfile = useMatch('/create-profile');
 
