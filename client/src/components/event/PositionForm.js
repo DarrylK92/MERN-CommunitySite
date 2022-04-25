@@ -60,7 +60,7 @@ const AddPosition = ({ createPosition, getPosition }) => {
           onChange={onChange}
           required
         />
-        { amount !== '' && <small className="form-text">Amount</small> }
+        {amount !== '' && <small className="form-text">Amount</small>}
       </div>
     );
   }
@@ -91,7 +91,7 @@ const AddPosition = ({ createPosition, getPosition }) => {
             onChange={onChange}
             required
           />
-          { name !== '' && <small className="form-text">Position Name</small> }
+          {name !== '' && <small className="form-text">Position Name</small>}
           <div className="form-group">
             <textarea
               name="requestedSkills"
@@ -101,7 +101,9 @@ const AddPosition = ({ createPosition, getPosition }) => {
               value={requestedSkills}
               onChange={onChange}
             />
-            { requestedSkills !== '' && <small className="form-text">Requested Skills</small> }
+            {requestedSkills !== '' && (
+              <small className="form-text">Requested Skills</small>
+            )}
           </div>
           {amountDisplay}
         </div>

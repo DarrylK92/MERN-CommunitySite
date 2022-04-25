@@ -141,7 +141,7 @@ export const createPosition =
         setAlert(edit ? 'Position Updated' : 'Position Created', 'success')
       );
 
-      navigate('/edit-event/edit-positions/' + formData.id);
+      navigate('/edit-event/edit-positions/' + event_id);
     } catch (err) {
       const errors = err.response.data.errors;
 
